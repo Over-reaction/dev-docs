@@ -9,7 +9,7 @@ const ruleBadgeTypes = {
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   lang: "zh-CN",
-  title: "开发",
+  title: "研发规范",
   description: "技术开发指南",
   markdown: {
     config(md) {
@@ -58,7 +58,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: "github", link: "https://github.com/vuejs/vitepress" },
+      { icon: "github", link: "https://github.com/Over-reaction/dev-docs" },
     ],
   },
 });
