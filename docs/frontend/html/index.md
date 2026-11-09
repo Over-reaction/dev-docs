@@ -8,9 +8,9 @@ outline: [2, 3]
 
 ## 文档版本控制
 
-| 版本号 | 修订时间 | 修订者 | 备注 |
-| --- | --- | --- | --- |
-| V1.0 | 2026/11/08 |  | 初稿 |
+| 版本号 | 修订时间   | 修订者 | 备注 |
+| ------ | ---------- | ------ | ---- |
+| V1.0.0 | 2026/11/08 | 金晨   | 初稿 |
 
 ## 1. 文件信息
 
@@ -69,10 +69,7 @@ outline: [2, 3]
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>订单查询</title>
     <meta name="description" content="查询订单状态与配送进度" />
     <link rel="stylesheet" href="./index.css" />

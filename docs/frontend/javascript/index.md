@@ -8,9 +8,9 @@ outline: [2, 4]
 
 ## 文档版本控制
 
-| 版本号 | 修订时间 | 修订者 | 备注 |
-| --- | --- | --- | --- |
-| V1.0 | 2026/11/08 |  | 初稿 |
+| 版本号 | 修订时间   | 修订者 | 备注 |
+| ------ | ---------- | ------ | ---- |
+| V1.0.0 | 2026/11/08 | 金晨   | 初稿 |
 
 ## 1. 文件信息
 
@@ -36,7 +36,7 @@ outline: [2, 4]
 
 ```js
 export const DEFAULT_OPTIONS = {
-  mode: 'standard',
+  mode: "standard",
   retryLimit: 3,
   timeoutMs: 1500,
 };
@@ -117,7 +117,7 @@ export function makeOptions(defaults, overrides, mode) {
 **【参考】** 优先用合适的数组方法表达迭代意图。参数多时考虑参数对象，圈复杂度约 10 或认知复杂度约 15 时检查是否需拆分。
 
 ```js
-export function getLabels(items, prefix = 'item') {
+export function getLabels(items, prefix = "item") {
   return items.map(({ id }) => `${prefix}-${id}`);
 }
 ```

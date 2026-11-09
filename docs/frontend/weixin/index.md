@@ -8,9 +8,9 @@ outline: [2, 4]
 
 ## 文档版本控制
 
-| 版本号 | 修订时间 | 修订者 | 备注 |
-| --- | --- | --- | --- |
-| V1.0 | 2026/11/08 |  | 初稿 |
+| 版本号 | 修订时间   | 修订者 | 备注 |
+| ------ | ---------- | ------ | ---- |
+| V1.0.0 | 2026/11/08 | 金晨   | 初稿 |
 
 ## 1. 文件信息
 
@@ -98,7 +98,7 @@ miniprogram/
 this.setData({
   orders,
   loading: false,
-  errorMessage: '',
+  errorMessage: "",
 });
 ```
 
@@ -109,7 +109,7 @@ this.setData({
 ```js
 // 写在 Page 的 openOrder 事件处理函数中
 const { id } = event.currentTarget.dataset;
-if (typeof id !== 'string' || !id) {
+if (typeof id !== "string" || !id) {
   return;
 }
 wx.navigateTo({
@@ -133,7 +133,7 @@ Component({
   },
   methods: {
     handleSelect() {
-      this.triggerEvent('select', { id: this.data.orderId });
+      this.triggerEvent("select", { id: this.data.orderId });
     },
   },
 });

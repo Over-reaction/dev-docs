@@ -6,6 +6,21 @@ const ruleBadgeTypes = {
   参考: "note",
 };
 
+const frontendStandards = [
+  { text: "HTML", link: "/frontend/html/" },
+  { text: "CSS", link: "/frontend/css/" },
+  { text: "JavaScript", link: "/frontend/javascript/" },
+  { text: "Vue 3", link: "/frontend/vue3/" },
+  { text: "微信小程序", link: "/frontend/weixin/" },
+];
+
+const backendStandards = [
+  { text: "Java开发标准", link: "/backend/" },
+  { text: "接口文档标准", link: "/backend/api-standard" },
+  { text: "技术方案标准", link: "/backend/technical-design" },
+  { text: "接口权限标准", link: "/backend/api-permission-design" },
+];
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   lang: "zh-CN",
@@ -35,26 +50,20 @@ export default defineConfig({
       { text: "首页", link: "/" },
       {
         text: "前端标准",
-        link: "/frontend/",
         activeMatch: "^/frontend/",
+        items: frontendStandards,
       },
-      { text: "后端标准", link: "/backend/" },
+      {
+        text: "后端标准",
+        activeMatch: "^/backend/",
+        items: backendStandards,
+      },
       { text: "版本更新", link: "/changelog/" },
     ],
 
     sidebar: {
-      "/frontend/": [
-        {
-          text: "前端标准",
-          items: [
-            { text: "HTML", link: "/frontend/html/" },
-            { text: "CSS", link: "/frontend/css/" },
-            { text: "JavaScript", link: "/frontend/javascript/" },
-            { text: "Vue 3", link: "/frontend/vue3/" },
-            { text: "微信小程序", link: "/frontend/weixin/" },
-          ],
-        },
-      ],
+      "/frontend/": [{ text: "前端标准", items: frontendStandards }],
+      "/backend/": [{ text: "后端标准", items: backendStandards }],
     },
 
     socialLinks: [
