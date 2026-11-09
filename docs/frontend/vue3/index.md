@@ -4,21 +4,19 @@ outline: [2, 4]
 
 # Vue 3 开发标准
 
-前端开发标准系列 · 广州一千河科技有限公司 · 2026 年 11 月
+## 文档版本
 
-## 文档版本控制
+| 版本号 | 修订时间   | 修订者 | 备注 |
+| ------ | ---------- | ------ | ---- |
+| V1.0.0 | 2026/11/08 | 金晨   | 初稿 |
 
-| 版本号 | 修订时间 | 修订者 | 备注 |
-| --- | --- | --- | --- |
-| V1.0.0 | 2026/11/08 |  | 初稿 |
-
-## 1. 文件信息
+## 1. 文档信息
 
 ### 1.1. 编制依据
 
 本标准以Vue3官方风格指南为基础，用于公司前端Vue3项目编写和代码评审。
 
-参考地址：[Vue 风格指南](https://cn.vuejs.org/style-guide/)。
+参考地址：[Vue3 风格指南](https://cn.vuejs.org/style-guide/)。
 
 ### 1.2. 适用范围和规则等级
 
@@ -89,7 +87,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: '',
+    default: "",
   },
   visible: {
     type: Boolean,
@@ -132,7 +130,7 @@ const props = defineProps({
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed } from "vue";
 
 const props = defineProps({
   users: {
@@ -206,10 +204,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(["submit"]);
 
 function handleSubmit() {
-  emit('submit', props.userInfo.id);
+  emit("submit", props.userInfo.id);
 }
 </script>
 ```

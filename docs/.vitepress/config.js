@@ -1,10 +1,34 @@
 import { defineConfig } from "vitepress";
 
+const ruleBadgeTypes = {
+  强制: "danger",
+  推荐: "warning",
+  参考: "note",
+};
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   lang: "zh-CN",
   title: "开发",
   description: "技术开发指南",
+  markdown: {
+    config(md) {
+      md.core.ruler.before("inline", "rule_badges", (state) => {
+        for (const [index, token] of state.tokens.entries()) {
+          if (
+            token.type === "inline" &&
+            state.tokens[index - 1]?.type === "paragraph_open"
+          ) {
+            token.content = token.content.replace(
+              /^\*\*【(强制|推荐|参考)】\*\*/,
+              (_, label) =>
+                `<Badge type="${ruleBadgeTypes[label]}" text="${label}" />`,
+            );
+          }
+        }
+      });
+    },
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
