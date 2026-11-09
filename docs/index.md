@@ -23,7 +23,9 @@ features:
     link: /frontend/
     linkText: 查看规范
   - title: 后端标准
-    details: 后端服务的开发规范，内容待补充。
+    details: 查阅 Java 编码、异常与日志、单元测试、安全、数据库和工程结构规范。
+    link: /backend/
+    linkText: 查看规范
   - title: 版本更新
     details: 查阅版本号升级规则、发布批次的计算方式和测试版本命名。
     link: /changelog/

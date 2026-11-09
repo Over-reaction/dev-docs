@@ -38,6 +38,7 @@ export default defineConfig({
         link: "/frontend/",
         activeMatch: "^/frontend/",
       },
+      { text: "后端标准", link: "/backend/" },
       { text: "版本更新", link: "/changelog/" },
     ],
 
