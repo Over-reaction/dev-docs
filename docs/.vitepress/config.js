@@ -18,6 +18,7 @@ const frontendStandards = [
 
 const frontendOtherStandards = [
   { text: "前端技术方案标准", link: "/frontend/other/technical-design" },
+  { text: "前端绩效考核", link: "/frontend/other/performance" },
 ];
 
 const backendDevelopmentStandard = {
@@ -29,6 +30,7 @@ const backendOtherStandards = [
   { text: "接口文档标准", link: "/backend/other/api-standard" },
   { text: "技术方案标准", link: "/backend/other/technical-design" },
   { text: "接口权限标准", link: "/backend/other/api-permission-design" },
+  { text: "后端绩效考核", link: "/backend/other/performance" },
 ];
 
 // https://vitepress.dev/reference/site-config
