@@ -12,22 +12,22 @@ hero:
   actions:
     - theme: brand
       text: 查阅后端标准
-      link: /backend/
+      link: /backend/standards/
     - theme: brand
       text: 查阅前端标准
-      link: /frontend/
+      link: /frontend/standards/html
     - theme: alt
       text: 查看版本规范
       link: /changelog/
 
 features:
   - title: 后端标准
-    details: 查阅 Java 编码、异常与日志、单元测试、安全、数据库和工程结构规范。
-    link: /backend/
+    details: 查阅 Java 开发规范、接口文档标准、技术方案标准和接口权限标准。
+    link: /backend/standards/
     linkText: 查看规范
   - title: 前端标准
-    details: 查阅 HTML、CSS、JavaScript、Vue 3 和微信小程序的开发规范。
-    link: /frontend/
+    details: 查阅 HTML、CSS、JavaScript、Vue 3、微信小程序开发规范和前端技术方案标准。
+    link: /frontend/standards/html
     linkText: 查看规范
   - title: 版本更新
     details: 查阅版本号升级规则、发布批次的计算方式和测试版本命名。

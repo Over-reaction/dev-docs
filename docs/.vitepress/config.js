@@ -6,19 +6,29 @@ const ruleBadgeTypes = {
   参考: "note",
 };
 
+const frontendHtmlPath = "/frontend/standards/html";
+
 const frontendStandards = [
-  { text: "HTML", link: "/frontend/html/" },
-  { text: "CSS", link: "/frontend/css/" },
-  { text: "JavaScript", link: "/frontend/javascript/" },
-  { text: "Vue 3", link: "/frontend/vue3/" },
-  { text: "微信小程序", link: "/frontend/weixin/" },
+  { text: "HTML", link: frontendHtmlPath },
+  { text: "CSS", link: "/frontend/standards/css" },
+  { text: "JavaScript", link: "/frontend/standards/javascript" },
+  { text: "Vue 3", link: "/frontend/standards/vue3" },
+  { text: "微信小程序", link: "/frontend/standards/weixin" },
 ];
 
-const backendStandards = [
-  { text: "Java开发标准", link: "/backend/" },
-  { text: "接口文档标准", link: "/backend/api-standard" },
-  { text: "技术方案标准", link: "/backend/technical-design" },
-  { text: "接口权限标准", link: "/backend/api-permission-design" },
+const frontendOtherStandards = [
+  { text: "前端技术方案标准", link: "/frontend/other/technical-design" },
+];
+
+const backendDevelopmentStandard = {
+  text: "Java开发标准",
+  link: "/backend/standards/",
+};
+
+const backendOtherStandards = [
+  { text: "接口文档标准", link: "/backend/other/api-standard" },
+  { text: "技术方案标准", link: "/backend/other/technical-design" },
+  { text: "接口权限标准", link: "/backend/other/api-permission-design" },
 ];
 
 // https://vitepress.dev/reference/site-config
@@ -51,19 +61,25 @@ export default defineConfig({
       {
         text: "前端标准",
         activeMatch: "^/frontend/",
-        items: frontendStandards,
+        link: frontendHtmlPath,
       },
       {
         text: "后端标准",
         activeMatch: "^/backend/",
-        items: backendStandards,
+        link: backendDevelopmentStandard.link,
       },
       { text: "版本更新", link: "/changelog/" },
     ],
 
     sidebar: {
-      "/frontend/": [{ text: "前端标准", items: frontendStandards }],
-      "/backend/": [{ text: "后端标准", items: backendStandards }],
+      "/frontend/": [
+        { text: "前端开发标准", items: frontendStandards },
+        { text: "专项标准", items: frontendOtherStandards },
+      ],
+      "/backend/": [
+        { text: "后端开发标准", items: [backendDevelopmentStandard] },
+        { text: "专项标准", items: backendOtherStandards },
+      ],
     },
 
     socialLinks: [
