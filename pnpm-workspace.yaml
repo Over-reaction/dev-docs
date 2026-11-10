@@ -1,0 +1,3 @@
+allowBuilds:
+  # vue-demi 自带 Vue 3 入口，无需运行 postinstall。
+  vue-demi: false

@@ -1,28 +1,38 @@
 <script setup>
-import { ref, useId } from "vue";
+import { nextTick, ref, useId } from "vue";
 
 defineProps({
   title: { type: String, default: "全屏预览" },
+  inlineControls: { type: Boolean, default: false },
 });
 
 const dialog = ref(null);
 const isOpen = ref(false);
 const contentId = useId();
+let opener;
 
-function openPreview() {
+function openPreview(event) {
+  opener = event.currentTarget;
   dialog.value.showModal();
   isOpen.value = true;
+}
+
+async function handleClose() {
+  isOpen.value = false;
+  await nextTick();
+  opener?.focus();
 }
 </script>
 
 <template>
-  <div class="fullscreen-preview-toolbar">
+  <div v-if="!inlineControls" class="fullscreen-preview-toolbar">
     <button class="fullscreen-preview-button" type="button" aria-haspopup="dialog" @click="openPreview">
       全屏预览
     </button>
   </div>
 
-  <dialog ref="dialog" class="fullscreen-preview-dialog" :aria-label="title" @close="isOpen = false">
+  <dialog ref="dialog" class="fullscreen-preview-dialog" :class="{ 'inline-controls': inlineControls }"
+    :aria-label="title" @close="handleClose">
     <header class="fullscreen-preview-header">
       <strong>{{ title }}</strong>
       <button class="fullscreen-preview-button" type="button" autofocus @click="dialog.close()">
@@ -33,7 +43,7 @@ function openPreview() {
   </dialog>
 
   <Teleport :to="`#${contentId}`" :disabled="!isOpen" defer>
-    <slot />
+    <slot :is-open="isOpen" :open-preview="openPreview" />
   </Teleport>
 </template>
 
@@ -99,6 +109,11 @@ function openPreview() {
   padding-inline: 1rem;
   overflow: auto;
   overscroll-behavior: contain;
+}
+
+.inline-controls .fullscreen-preview-content {
+  padding: 0;
+  overflow: hidden;
 }
 
 :global(html:has(.fullscreen-preview-dialog[open])) {

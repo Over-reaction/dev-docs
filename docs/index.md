@@ -21,6 +21,10 @@ hero:
       link: /changelog/
 
 features:
+  - title: 工作流程
+    details: 查看新增需求、优化和 BUG 的登记、评审、开发与交付流程。
+    link: /workflow/
+    linkText: 查看工作流程
   - title: 后端标准
     details: 查阅 Java 开发规范、接口文档标准、技术方案标准和接口权限标准。
     link: /backend/standards/
@@ -33,8 +37,6 @@ features:
     details: 查阅版本号升级规则、发布批次的计算方式和测试版本命名。
     link: /changelog/
     linkText: 查看版本规范
-  - title: 工作流程
-    details: 研发协作与交付流程，内容待补充。
 ---
 
 <style>

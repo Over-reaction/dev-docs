@@ -61,14 +61,19 @@ export default defineConfig({
     nav: [
       { text: "首页", link: "/" },
       {
-        text: "前端标准",
-        activeMatch: "^/frontend/",
-        link: frontendHtmlPath,
+        text: "工作流程",
+        activeMatch: "^/workflow/",
+        link: "/workflow/",
       },
       {
         text: "后端标准",
         activeMatch: "^/backend/",
         link: backendDevelopmentStandard.link,
+      },
+      {
+        text: "前端标准",
+        activeMatch: "^/frontend/",
+        link: frontendHtmlPath,
       },
       { text: "版本更新", link: "/changelog/" },
     ],
