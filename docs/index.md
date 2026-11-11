@@ -5,7 +5,7 @@ pageClass: standards-home
 
 hero:
   name: 广州一千河科技有限公司研发规范
-  tagline: 查阅开发标准、软件版本管理规范与研发工作流程。
+  tagline: 查阅研发工作流程、开发标准与版本号管理规范
   image:
     src: /standards-hero.svg
     alt: ""
@@ -17,7 +17,7 @@ hero:
       text: 查阅前端标准
       link: /frontend/standards/html
     - theme: alt
-      text: 查看版本规范
+      text: 查看版本号规范
       link: /changelog/
 
 features:
@@ -33,28 +33,8 @@ features:
     details: 查阅 HTML、CSS、JavaScript、Vue 3、微信小程序开发规范和前端技术方案标准。
     link: /frontend/standards/html
     linkText: 查看规范
-  - title: 版本更新
+  - title: 版本号规范
     details: 查阅版本号升级规则、发布批次的计算方式和测试版本命名。
     link: /changelog/
-    linkText: 查看版本规范
+    linkText: 查看版本号规范
 ---
-
-<style>
-.standards-home {
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(
-    110deg,
-    var(--vp-c-brand-1),
-    var(--vp-c-text-1)
-  );
-  --vp-home-hero-image-background-image: radial-gradient(
-    ellipse,
-    var(--vp-c-brand-soft),
-    transparent 70%
-  );
-}
-
-.standards-home .VPFeature {
-  border-color: var(--vp-c-divider);
-}
-</style>

@@ -1,3 +1,39 @@
+<template>
+  <VueFlow class="workflow-canvas bg-surface-soft" :nodes="diagramNodes" :edges="edges"
+    :default-edge-options="edgeOptions" :default-viewport="initialViewport" :connection-mode="ConnectionMode.Strict"
+    :min-zoom="0.05" :max-zoom="1.75" :nodes-draggable="false" :nodes-connectable="false" :elements-selectable="false"
+    :nodes-focusable="false" :edges-focusable="false" :zoom-on-scroll="true" :prevent-scrolling="true"
+    :fit-view-on-init="!stages.length" @init="flow = $event">
+    <Background variant="dots" :gap="24" :size="2" color="var(--vp-c-text-3)" aria-hidden="true" />
+    <template #edge-workflow-route="edge">
+      <WorkflowRoute v-bind="edge" />
+    </template>
+    <template #node-workflow="{ data }">
+      <div v-if="data.shape === 'stage'" :data-workflow-stage="data.stageId" class="workflow-stage flex h-[40px] w-[188px] items-center
+        border-l-[3px] border-l-brand bg-surface px-[12px] text-[15px] font-semibold">
+        {{ data.label }}
+      </div>
+      <div v-else :data-workflow-stage="data.stageId" class="workflow-node relative grid h-[64px] w-[128px] box-border place-items-center
+        px-[13px] py-0 text-center text-[14px] leading-[1.35] whitespace-pre-line text-content" :class="data.shape">
+        <Handle v-for="position in positions" :id="position" :key="'target-' + position" type="target"
+          :position="position" />
+        <svg class="workflow-node-shape absolute inset-0 size-full fill-surface stroke-content-muted stroke-[1.5]"
+          viewBox="0 0 128 64" preserveAspectRatio="none" aria-hidden="true">
+          <path v-if="data.shape === 'input'" d="M 18 1 H 127 L 110 63 H 1 Z" />
+          <path v-else-if="data.shape === 'document'" d="M 1 1 H 127 V 55 C 77 29 51 80 1 55 Z" />
+          <path v-else-if="data.shape === 'decision'" d="M 64 1 L 127 32 L 64 63 L 1 32 Z" />
+          <rect v-else-if="data.shape === 'terminal'" x="1" y="8" width="126" height="48" rx="24" />
+          <rect v-else x="1" y="1" width="126" height="62" />
+        </svg>
+        <span class="relative">{{ data.label }}</span>
+        <Handle v-for="position in positions" :id="position" :key="'source-' + position" type="source"
+          :position="position" />
+      </div>
+    </template>
+  </VueFlow>
+</template>
+
+
 <script setup>
 import { computed, shallowRef } from "vue";
 import { Background } from "@vue-flow/background";
@@ -54,119 +90,47 @@ function focusStage(stageId) {
 defineExpose({ zoomIn, zoomOut, fitView, focusStage });
 </script>
 
-<template>
-  <VueFlow class="workflow-canvas" :nodes="diagramNodes" :edges="edges" :default-edge-options="edgeOptions"
-    :default-viewport="initialViewport" :connection-mode="ConnectionMode.Strict" :min-zoom="0.05" :max-zoom="1.75"
-    :nodes-draggable="false" :nodes-connectable="false" :elements-selectable="false" :nodes-focusable="false"
-    :edges-focusable="false" :zoom-on-scroll="false" :prevent-scrolling="false" :fit-view-on-init="!stages.length"
-    @init="flow = $event">
-    <Background variant="dots" :gap="24" :size="2" color="var(--vp-c-text-3)" aria-hidden="true" />
-    <template #edge-workflow-route="edge">
-      <WorkflowRoute v-bind="edge" />
-    </template>
-    <template #node-workflow="{ data }">
-      <div v-if="data.shape === 'stage'" class="workflow-stage">{{ data.label }}</div>
-      <div v-else class="workflow-node" :class="data.shape">
-        <Handle v-for="position in positions" :id="position" :key="'target-' + position" type="target"
-          :position="position" />
-        <svg class="workflow-node-shape" viewBox="0 0 128 64" preserveAspectRatio="none" aria-hidden="true">
-          <path v-if="data.shape === 'input'" d="M 18 1 H 127 L 110 63 H 1 Z" />
-          <path v-else-if="data.shape === 'document'" d="M 1 1 H 127 V 55 C 77 29 51 80 1 55 Z" />
-          <path v-else-if="data.shape === 'decision'" d="M 64 1 L 127 32 L 64 63 L 1 32 Z" />
-          <rect v-else-if="data.shape === 'terminal'" x="1" y="8" width="126" height="48" rx="24" />
-          <rect v-else x="1" y="1" width="126" height="62" />
-        </svg>
-        <span>{{ data.label }}</span>
-        <Handle v-for="position in positions" :id="position" :key="'source-' + position" type="source"
-          :position="position" />
-      </div>
-    </template>
-  </VueFlow>
-</template>
-
 <style scoped>
-.workflow-canvas {
-  background: var(--vp-c-bg-soft);
+@reference "../theme/tailwind.css";
+
+.workflow-stage[data-workflow-stage] {
+  @apply border-l-stage-accent bg-stage-surface;
 }
 
-.workflow-stage {
-  display: flex;
-  align-items: center;
-  width: 188px;
-  height: 40px;
-  padding-inline: 12px;
-  border-left: 3px solid var(--vp-c-brand-1);
-  background: var(--vp-c-bg);
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.workflow-node {
-  position: relative;
-  display: grid;
-  place-items: center;
-  box-sizing: border-box;
-  width: 128px;
-  height: 64px;
-  padding: 0 13px;
-  color: var(--vp-c-text-1);
-  font-size: 14px;
-  line-height: 1.35;
-  text-align: center;
-  white-space: pre-line;
-}
-
-.workflow-node-shape {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  fill: var(--vp-c-bg);
-  stroke: var(--vp-c-text-2);
-  stroke-width: 1.5;
+.workflow-node[data-workflow-stage] .workflow-node-shape {
+  @apply fill-stage-surface stroke-stage-accent;
 }
 
 .workflow-node.decision {
-  width: 164px;
-  height: 84px;
-  padding: 0 36px;
+  @apply h-[84px] w-[164px] px-[36px];
 }
 
 .workflow-node-shape>* {
   vector-effect: non-scaling-stroke;
 }
 
-.workflow-node span {
-  position: relative;
-}
-
 .workflow-node.document span {
-  margin-bottom: 6px;
+  @apply mb-[6px];
 }
 
 .workflow-node :deep(.vue-flow__handle) {
-  width: 0;
-  height: 0;
-  min-width: 0;
-  min-height: 0;
-  border: 0;
-  opacity: 0;
+  @apply size-0 min-h-0 min-w-0 border-0 opacity-0;
 }
 
 .workflow-node.input :deep(.vue-flow__handle-left) {
-  left: 9px;
+  @apply left-[9px];
 }
 
 .workflow-node.input :deep(.vue-flow__handle-right) {
-  right: 9px;
+  @apply right-[9px];
 }
 
 .workflow-node.terminal :deep(.vue-flow__handle-top) {
-  top: 8px;
+  @apply top-[8px];
 }
 
 .workflow-node.terminal :deep(.vue-flow__handle-bottom),
 .workflow-node.document :deep(.vue-flow__handle-bottom) {
-  bottom: 8px;
+  @apply bottom-[8px];
 }
 </style>

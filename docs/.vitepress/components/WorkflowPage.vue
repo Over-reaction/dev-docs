@@ -1,3 +1,17 @@
+<template>
+  <main class="workflow-page vp-doc mx-auto max-w-[1520px] px-[clamp(16px,4vw,48px)] pt-[32px] pb-[64px]">
+    <nav class="workflow-links mb-[24px] flex flex-wrap gap-[8px]" aria-label="工作流程">
+      <a v-for="page in pages" :key="page.id" :href="pageHref(page.url)"
+        :aria-current="current === page.id ? 'page' : undefined">{{ page.label }}</a>
+    </nav>
+    <slot name="intro" />
+    <ClientOnly>
+      <WorkflowDiagram :label="label" v-bind="flow" />
+    </ClientOnly>
+    <slot />
+  </main>
+</template>
+
 <script setup>
 import { useData, withBase } from "vitepress";
 import WorkflowDiagram from "./WorkflowDiagram.vue";
@@ -21,54 +35,19 @@ function pageHref(url) {
 }
 </script>
 
-<template>
-  <main class="workflow-page vp-doc">
-    <nav class="workflow-links" aria-label="工作流程">
-      <a
-        v-for="page in pages"
-        :key="page.id"
-        :href="pageHref(page.url)"
-        :aria-current="current === page.id ? 'page' : undefined"
-      >{{ page.label }}</a>
-    </nav>
-    <slot name="intro" />
-    <ClientOnly>
-      <WorkflowDiagram :label="label" v-bind="flow" />
-    </ClientOnly>
-    <slot />
-  </main>
-</template>
-
 <style scoped>
-.workflow-page {
-  max-width: 1520px;
-  margin: 0 auto;
-  padding: 32px clamp(16px, 4vw, 48px) 64px;
-}
-
-.workflow-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
-}
+@reference "../theme/tailwind.css";
 
 .workflow-links a {
-  padding: 4px 16px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  color: var(--vp-c-text-2);
-  font-weight: 600;
-  text-decoration: none;
+  @apply rounded-[6px] border border-divider px-[16px] py-[4px] font-semibold text-content-muted no-underline;
 }
 
 .workflow-links a:hover,
 .workflow-links a[aria-current="page"] {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
+  @apply border-brand text-brand;
 }
 
 .workflow-links a[aria-current="page"] {
-  background: var(--vp-c-brand-soft);
+  @apply bg-brand-soft;
 }
 </style>

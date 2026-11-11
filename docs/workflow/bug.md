@@ -5,7 +5,7 @@ title: BUG 处理流程
 
 <script setup>
 import WorkflowPage from "../.vitepress/components/WorkflowPage.vue";
-import { bugFlow } from "/workflow/flows.js";
+import { bugFlow } from "/workflow/flows/bug.js";
 </script>
 
 <WorkflowPage current="bug" label="BUG 处理流程图" :flow="bugFlow">

@@ -5,7 +5,7 @@ title: 需求流程
 
 <script setup>
 import WorkflowPage from "../.vitepress/components/WorkflowPage.vue";
-import { requirementFlow } from "./flows.js";
+import { requirementFlow } from "./flows/requirement.js";
 </script>
 
 <WorkflowPage current="requirements" label="需求流程图" :flow="requirementFlow">

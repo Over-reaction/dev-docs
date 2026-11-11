@@ -16,7 +16,9 @@ const tableStyle = computed(() => {
 </script>
 
 <template>
-  <div class="excel-table-scroll" role="region" :aria-label="label" tabindex="0">
+  <div
+    class="my-5 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+    role="region" :aria-label="label" tabindex="0">
     <table class="excel-table" :style="tableStyle" :aria-label="label">
       <colgroup v-if="columnWidths.length">
         <col v-for="(width, index) in columnWidths" :key="index" :style="{ width: `${width}px` }" />
@@ -41,27 +43,14 @@ const tableStyle = computed(() => {
 </template>
 
 <style scoped>
-.excel-table-scroll {
-  margin: 1.25rem 0;
-  overflow-x: auto;
-}
-
-.excel-table-scroll:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 2px;
-}
+@reference "../theme/tailwind.css";
 
 .vp-doc .excel-table {
-  display: table;
-  width: 100%;
-  margin: 0;
+  @apply m-0 table w-full;
 }
 
 .excel-table th,
 .excel-table td {
-  text-align: center;
-  vertical-align: middle;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  @apply text-center align-middle whitespace-pre-wrap wrap-anywhere;
 }
 </style>

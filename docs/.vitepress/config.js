@@ -1,3 +1,4 @@
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vitepress";
 
 const ruleBadgeTypes = {
@@ -38,6 +39,9 @@ export default defineConfig({
   lang: "zh-CN",
   title: "研发规范",
   description: "技术开发指南",
+  vite: {
+    plugins: [tailwindcss()],
+  },
   markdown: {
     config(md) {
       md.core.ruler.before("inline", "rule_badges", (state) => {
@@ -75,7 +79,7 @@ export default defineConfig({
         activeMatch: "^/frontend/",
         link: frontendHtmlPath,
       },
-      { text: "版本更新", link: "/changelog/" },
+      { text: "版本号规范", link: "/changelog/" },
     ],
 
     sidebar: {

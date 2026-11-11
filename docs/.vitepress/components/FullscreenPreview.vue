@@ -1,3 +1,31 @@
+<template>
+  <div v-if="!inlineControls" class="mt-4 flex justify-end">
+    <button class="fullscreen-preview-button" type="button" aria-haspopup="dialog" @click="openPreview">
+      全屏预览
+    </button>
+  </div>
+
+  <dialog ref="dialog" class="fullscreen-preview-dialog" :aria-label="title" @close="handleClose">
+    <header
+      class="flex items-center justify-between gap-4 border-b border-divider px-4 py-3"
+    >
+      <strong>{{ title }}</strong>
+      <button class="fullscreen-preview-button" type="button" autofocus @click="dialog.close()">
+        退出全屏
+      </button>
+    </header>
+    <div
+      :id="contentId"
+      class="min-h-0 flex-1 overscroll-contain"
+      :class="inlineControls ? 'overflow-hidden' : 'overflow-auto px-4'"
+    ></div>
+  </dialog>
+
+  <Teleport :to="`#${contentId}`" :disabled="!isOpen" defer>
+    <slot :is-open="isOpen" :open-preview="openPreview" />
+  </Teleport>
+</template>
+
 <script setup>
 import { nextTick, ref, useId } from "vue";
 
@@ -23,100 +51,32 @@ async function handleClose() {
   opener?.focus();
 }
 </script>
-
-<template>
-  <div v-if="!inlineControls" class="fullscreen-preview-toolbar">
-    <button class="fullscreen-preview-button" type="button" aria-haspopup="dialog" @click="openPreview">
-      全屏预览
-    </button>
-  </div>
-
-  <dialog ref="dialog" class="fullscreen-preview-dialog" :class="{ 'inline-controls': inlineControls }"
-    :aria-label="title" @close="handleClose">
-    <header class="fullscreen-preview-header">
-      <strong>{{ title }}</strong>
-      <button class="fullscreen-preview-button" type="button" autofocus @click="dialog.close()">
-        退出全屏
-      </button>
-    </header>
-    <div :id="contentId" class="fullscreen-preview-content"></div>
-  </dialog>
-
-  <Teleport :to="`#${contentId}`" :disabled="!isOpen" defer>
-    <slot :is-open="isOpen" :open-preview="openPreview" />
-  </Teleport>
-</template>
-
 <style scoped>
-.fullscreen-preview-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
-}
+@reference "../theme/tailwind.css";
 
 .fullscreen-preview-button {
-  flex-shrink: 0;
-  padding: 0.375rem 0.75rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 0.375rem;
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-  font-size: 0.875rem;
-  font-weight: 600;
+  @apply shrink-0 rounded-md border border-divider bg-surface-soft px-3 py-1.5 text-[0.875rem] font-semibold text-content;
 }
 
 .fullscreen-preview-button:hover {
-  border-color: var(--vp-c-brand-1);
+  @apply border-brand;
 }
 
 .fullscreen-preview-button:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 2px;
+  @apply outline-2 outline-offset-2 outline-brand;
 }
 
 .fullscreen-preview-dialog {
-  position: fixed;
-  inset: 0;
-  width: 100%;
+  @apply fixed inset-0 m-0 max-h-none w-full max-w-none border-none bg-surface p-0 text-content;
   height: 100%;
   height: 100dvh;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
 }
 
 .fullscreen-preview-dialog[open] {
-  display: flex;
-  flex-direction: column;
-}
-
-.fullscreen-preview-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.fullscreen-preview-content {
-  flex: 1;
-  min-height: 0;
-  padding-inline: 1rem;
-  overflow: auto;
-  overscroll-behavior: contain;
-}
-
-.inline-controls .fullscreen-preview-content {
-  padding: 0;
-  overflow: hidden;
+  @apply flex flex-col;
 }
 
 :global(html:has(.fullscreen-preview-dialog[open])) {
-  overflow: hidden;
+  @apply overflow-hidden;
 }
 </style>

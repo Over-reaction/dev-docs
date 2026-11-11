@@ -5,7 +5,7 @@ title: 优化流程
 
 <script setup>
 import WorkflowPage from "../.vitepress/components/WorkflowPage.vue";
-import { optimizationFlow } from "./flows.js";
+import { optimizationFlow } from "./flows/optimization.js";
 </script>
 
 <WorkflowPage current="optimization" label="优化流程图" :flow="optimizationFlow">
