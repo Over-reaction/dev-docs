@@ -23,6 +23,21 @@ const stages = [
 
 export const optimizationFlow = {
   stages,
+  simulation: {
+    starts: [
+      { id: "5", label: "从头开始" },
+      { id: "37", label: "从功能测试开始" },
+    ],
+    joins: { 9: "14", 29: "32" },
+    unresolvedBranches: { 17: "否", 21: "否" },
+    questions: {
+      15: "研发组长初审是否存疑？",
+      24: "需求评审是否通过？",
+      35: "前后端联调是否通过？",
+      39: "功能测试是否通过？",
+      42: "客户上线前测试是否通过？",
+    },
+  },
   nodes: [
     ...stages,
     {

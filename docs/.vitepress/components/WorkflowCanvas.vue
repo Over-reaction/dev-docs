@@ -1,28 +1,36 @@
 <template>
-  <VueFlow class="workflow-canvas" :nodes="diagramNodes" :edges="edges"
-    :default-edge-options="edgeOptions" :default-viewport="initialViewport" :connection-mode="ConnectionMode.Strict"
-    :min-zoom="0.05" :max-zoom="1.75" :nodes-draggable="false" :nodes-connectable="false" :elements-selectable="false"
-    :nodes-focusable="false" :edges-focusable="false" :zoom-on-scroll="true" :prevent-scrolling="true"
-    :fit-view-on-init="!stages.length" @init="flow = $event">
+  <VueFlow class="workflow-canvas" :nodes="diagramNodes" :edges="diagramEdges" :default-edge-options="edgeOptions"
+    :default-viewport="initialViewport" :connection-mode="ConnectionMode.Strict" :min-zoom="0.05" :max-zoom="1.75"
+    :nodes-draggable="false" :nodes-connectable="false" :elements-selectable="false" :nodes-focusable="false"
+    :edges-focusable="false" :zoom-on-scroll="true" :prevent-scrolling="true" :fit-view-on-init="!stages.length"
+    @init="flow = $event">
     <Background variant="dots" :gap="24" :size="2" color="var(--vp-c-text-3)" aria-hidden="true" />
     <template #edge-workflow-route="edge">
       <WorkflowRoute v-bind="edge" />
     </template>
-    <template #node-workflow="{ data }">
+    <template #node-workflow="{ id, data }">
       <div v-if="data.shape === 'stage'" class="workflow-canvas__stage" :data-workflow-stage="data.stageId">
         {{ data.label }}
       </div>
-      <div v-else class="workflow-canvas__node" :class="data.shape && `workflow-canvas__node--${data.shape}`"
-        :data-workflow-stage="data.stageId">
+      <div v-else class="workflow-canvas__node" :class="[
+        data.shape && `workflow-canvas__node--${data.shape}`,
+        {
+          'workflow-canvas__node--visited': progress?.visitedNodes.has(id),
+          'workflow-canvas__node--current': progress?.nodeId === id,
+          'workflow-canvas__node--preview': progress?.previewEdge?.target === id,
+        },
+      ]" :data-workflow-stage="data.stageId" :aria-current="progress?.nodeId === id ? 'step' : undefined">
         <Handle v-for="position in positions" :id="position" :key="'target-' + position" type="target"
           :position="position" />
-        <svg class="workflow-canvas__node-shape"
-          viewBox="0 0 128 64" preserveAspectRatio="none" aria-hidden="true">
-          <path v-if="data.shape === 'input'" d="M 18 1 H 127 L 110 63 H 1 Z" />
-          <path v-else-if="data.shape === 'document'" d="M 1 1 H 127 V 55 C 77 29 51 80 1 55 Z" />
-          <path v-else-if="data.shape === 'decision'" d="M 64 1 L 127 32 L 64 63 L 1 32 Z" />
-          <rect v-else-if="data.shape === 'terminal'" x="1" y="8" width="126" height="48" rx="24" />
-          <rect v-else x="1" y="1" width="126" height="62" />
+        <svg class="workflow-canvas__node-shape" viewBox="0 0 128 64" preserveAspectRatio="none" aria-hidden="true">
+          <g :id="`${outlinePrefix}-${id}`" class="workflow-canvas__node-outline">
+            <path v-if="data.shape === 'input'" pathLength="100" d="M 18 1 H 127 L 110 63 H 1 Z" />
+            <path v-else-if="data.shape === 'document'" pathLength="100" d="M 1 1 H 127 V 55 C 77 29 51 80 1 55 Z" />
+            <path v-else-if="data.shape === 'decision'" pathLength="100" d="M 64 1 L 127 32 L 64 63 L 1 32 Z" />
+            <rect v-else-if="data.shape === 'terminal'" pathLength="100" x="1" y="8" width="126" height="48" rx="24" />
+            <rect v-else pathLength="100" x="1" y="1" width="126" height="62" />
+          </g>
+          <use v-if="progress?.nodeId === id" :href="`#${outlinePrefix}-${id}`" class="workflow-canvas__node-dot" />
         </svg>
         <span class="workflow-canvas__node-label">{{ data.label }}</span>
         <Handle v-for="position in positions" :id="position" :key="'source-' + position" type="source"
@@ -34,7 +42,7 @@
 
 
 <script setup>
-import { computed, shallowRef } from "vue";
+import { computed, shallowRef, useId, watch } from "vue";
 import { Background } from "@vue-flow/background";
 import { ConnectionMode, Handle, MarkerType, Position, VueFlow } from "@vue-flow/core";
 import WorkflowRoute from "./WorkflowRoute.vue";
@@ -44,9 +52,11 @@ const props = defineProps({
   nodes: { type: Array, required: true },
   edges: { type: Array, required: true },
   stages: { type: Array, default: () => [] },
+  progress: { type: Object, default: null },
 });
 
 const flow = shallowRef(null);
+const outlinePrefix = `workflow-outline-${useId()}`;
 const diagramNodes = computed(() =>
   props.nodes.map((node) => ({ ...node, type: "workflow" })),
 );
@@ -60,6 +70,36 @@ const edgeOptions = {
   labelBgStyle: { fill: "var(--vp-c-bg-soft)" },
   labelBgPadding: [4, 3],
 };
+
+const diagramEdges = computed(() => props.edges.map((edge) => {
+  const style = edge.style ?? edgeOptions.style;
+  const markerEnd = edge.markerEnd ?? edgeOptions.markerEnd;
+  const previewed = props.progress?.previewEdge?.id === edge.id;
+  if (!previewed && !props.progress?.visitedEdges.has(edge.id)) return { ...edge, style, markerEnd };
+
+  const stroke = "var(--vp-c-brand-1)";
+  const emphasized = previewed || props.progress.latestEdges.has(edge.id);
+  return {
+    ...edge,
+    style: {
+      ...style,
+      stroke,
+      strokeWidth: emphasized ? 3.5 : 2.5,
+      ...(previewed ? { strokeDasharray: "6 4" } : {}),
+    },
+    markerEnd: { type: MarkerType.ArrowClosed, color: stroke },
+  };
+}));
+
+watch([
+  () => props.progress?.nodeId,
+  () => flow.value?.dimensions.value.width,
+  () => flow.value?.dimensions.value.height,
+], ([id, width, height], [previousId]) => {
+  if (!id || !width || !height) return;
+  const animate = id !== previousId && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  flow.value.fitView({ nodes: [id], padding: 0.25, maxZoom: 1, duration: animate ? 240 : 0 });
+}, { flush: "post" });
 
 function stageViewport(stage) {
   return { x: 24 - stage.position.x, y: 20 - stage.position.y, zoom: 1 };
@@ -142,7 +182,68 @@ defineExpose({ zoomIn, zoomOut, fitView, focusStage });
   stroke: var(--workflow-stage-accent, var(--vp-c-brand-1));
 }
 
-.workflow-canvas__node-shape > * {
+.workflow-canvas__node.workflow-canvas__node--visited .workflow-canvas__node-shape {
+  stroke: var(--vp-c-brand-1);
+  stroke-width: 2;
+}
+
+.workflow-canvas__node.workflow-canvas__node--current .workflow-canvas__node-shape {
+  overflow: visible;
+  fill: color-mix(in srgb, var(--vp-c-brand-1) 16%, var(--vp-c-bg));
+  stroke-width: 3.5;
+  animation: workflow-canvas-current-glow 2s ease-in-out infinite;
+}
+
+.workflow-canvas__node--current .workflow-canvas__node-label {
+  font-weight: 700;
+}
+
+.workflow-canvas__node--preview .workflow-canvas__node-outline {
+  stroke: var(--vp-c-brand-1);
+  stroke-width: 2.5;
+  stroke-dasharray: 5 4;
+}
+
+@keyframes workflow-canvas-current-glow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px color-mix(in srgb, var(--vp-c-brand-1) 30%, transparent));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--vp-c-brand-1) 75%, transparent));
+  }
+}
+
+.workflow-canvas__node-dot {
+  fill: none;
+  stroke: color-mix(in srgb, var(--vp-c-brand-1) 40%, var(--vp-c-text-1));
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.6 99.4;
+  filter: drop-shadow(0 0 2px var(--vp-c-brand-1));
+  pointer-events: none;
+  animation: workflow-canvas-current-orbit 3.2s linear infinite;
+}
+
+@keyframes workflow-canvas-current-orbit {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workflow-canvas__node.workflow-canvas__node--current .workflow-canvas__node-shape {
+    animation: none;
+  }
+
+  .workflow-canvas__node-dot {
+    display: none;
+  }
+}
+
+.workflow-canvas__node-outline>* {
   vector-effect: non-scaling-stroke;
 }
 

@@ -12,6 +12,10 @@
           </button>
         </div>
         <div class="workflow-diagram__controls" role="group" aria-label="画布视图">
+          <button v-if="simulation" class="workflow-diagram__button workflow-diagram__button--simulation"
+            type="button" :aria-expanded="simulating" @click="toggleSimulation">
+            {{ simulating ? "退出模拟" : "开始模拟" }}
+          </button>
           <button class="workflow-diagram__button" type="button" aria-label="放大流程图" @click="canvas?.zoomIn()">+</button>
           <button class="workflow-diagram__button" type="button" aria-label="缩小流程图" @click="canvas?.zoomOut()">−</button>
           <button class="workflow-diagram__button" type="button" @click="canvas?.fitView()">查看全图</button>
@@ -19,26 +23,38 @@
             @click="openPreview">全屏预览</button>
         </div>
       </div>
+      <WorkflowSimulation v-if="simulating" class="workflow-diagram__simulation"
+        :config="simulation" :nodes="nodes" :edges="edges" :stages="stages"
+        @progress="progress = $event" />
       <div class="workflow-diagram__viewport">
-        <WorkflowCanvas ref="canvas" :nodes="nodes" :edges="edges" :stages="stages" />
+        <WorkflowCanvas ref="canvas" :nodes="nodes" :edges="edges" :stages="stages" :progress="progress" />
       </div>
     </div>
   </FullscreenPreview>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, shallowRef } from "vue";
 import FullscreenPreview from "./FullscreenPreview.vue";
 import WorkflowCanvas from "./WorkflowCanvas.vue";
+import WorkflowSimulation from "./WorkflowSimulation.vue";
 
 defineProps({
   label: { type: String, required: true },
   nodes: { type: Array, required: true },
   edges: { type: Array, required: true },
   stages: { type: Array, default: () => [] },
+  simulation: { type: Object, default: null },
 });
 
 const canvas = ref(null);
+const simulating = ref(false);
+const progress = shallowRef(null);
+
+function toggleSimulation() {
+  simulating.value = !simulating.value;
+  if (!simulating.value) progress.value = null;
+}
 </script>
 
 <style scoped>
@@ -80,6 +96,13 @@ const canvas = ref(null);
   background-color: var(--workflow-stage-surface, var(--vp-c-bg));
 }
 
+.workflow-diagram__button--simulation {
+  border-color: var(--vp-c-brand-1);
+  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+
 .workflow-diagram__button:hover,
 .workflow-diagram__button:focus-visible {
   border-color: var(--vp-c-brand-1);
@@ -99,6 +122,11 @@ const canvas = ref(null);
   flex-direction: column;
   border: 0;
   border-radius: 0;
+}
+
+.workflow-diagram--fullscreen .workflow-diagram__simulation {
+  max-height: 50%;
+  overflow: auto;
 }
 
 .workflow-diagram--fullscreen .workflow-diagram__viewport {
