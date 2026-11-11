@@ -3,52 +3,52 @@ export const bugFlow = {
     {
       id: "1",
       position: { x: -64, y: -32 },
-      data: { label: "BUG" },
+      data: { label: "BUG", stageId: "1" },
     },
     {
       id: "2",
       position: { x: 102.6, y: -32 },
-      data: { label: "记录腾讯文档\n问题登记", shape: "input" },
+      data: { label: "记录腾讯文档\n问题登记", shape: "input", stageId: "1" },
     },
     {
       id: "3",
       position: { x: 269.2, y: -32 },
-      data: { label: "反馈系统负责\n研发人员" },
+      data: { label: "反馈系统负责\n研发人员", stageId: "1" },
     },
     {
       id: "4",
       position: { x: 435.8, y: -32 },
-      data: { label: "前后端定责，\n责任人处理" },
+      data: { label: "前后端定责，\n责任人处理", stageId: "1" },
     },
     {
       id: "5",
       position: { x: 602.4, y: -32 },
-      data: { label: "研发定位问题\n原因，修复 BUG" },
+      data: { label: "研发定位问题\n原因，修复 BUG", stageId: "1" },
     },
     {
       id: "6",
       position: { x: 769, y: -32 },
-      data: { label: "产品测试" },
+      data: { label: "产品测试", stageId: "1" },
     },
     {
       id: "7",
       position: { x: 935.6, y: -32 },
-      data: { label: "发布上线" },
+      data: { label: "发布上线", stageId: "1" },
     },
     {
       id: "8",
       position: { x: 1102.2, y: -32 },
-      data: { label: "结束", shape: "terminal" },
+      data: { label: "结束", shape: "terminal", stageId: "1" },
     },
     {
       id: "9",
       position: { x: 935.6, y: 102.4 },
-      data: { label: "记录发布\n上线版本", shape: "document" },
+      data: { label: "记录发布\n上线版本", shape: "document", stageId: "1" },
     },
     {
       id: "10",
       position: { x: 1102.2, y: 102.4 },
-      data: { label: "填写问题清单", shape: "document" },
+      data: { label: "填写问题清单", shape: "document", stageId: "1" },
     },
   ],
   edges: [

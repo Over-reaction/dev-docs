@@ -73,11 +73,6 @@ const projectStructure = [
         children: [{ name: "user.js", description: "用户会话和权限状态" }],
       },
       {
-        name: "types",
-        description: "可选的 JSDoc 共享类型",
-        children: [{ name: "user.js", description: "用户数据结构的 JSDoc 定义" }],
-      },
-      {
         name: "utils",
         description: "通用工具函数",
         children: [{ name: "format.js", description: "日期和金额格式化" }],
@@ -200,10 +195,6 @@ stores/
 ├── app.js    # 侧边栏折叠、加载状态和主题
 └── goods.js  # 商品模块共享缓存
 ```
-
-### `src/types/`（共享类型，可选）
-
-使用 JSDoc 时，可按业务模块在此维护跨模块复用的数据结构。例如在 `user.js` 中通过 `@typedef` 定义用户信息的结构。
 
 ### `src/utils/`（工具函数）
 
