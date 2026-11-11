@@ -1,4 +1,4 @@
 import DefaultTheme from "vitepress/theme";
-import "./tailwind.css";
+import "./variables.css";
 
 export default DefaultTheme;

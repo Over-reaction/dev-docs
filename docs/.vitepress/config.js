@@ -1,4 +1,3 @@
-import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vitepress";
 
 const ruleBadgeTypes = {
@@ -19,29 +18,33 @@ const frontendStandards = [
 
 const frontendOtherStandards = [
   { text: "前端技术方案标准", link: "/frontend/other/technical-design" },
-  { text: "前端绩效考核", link: "/frontend/other/performance" },
+  { text: "Vue 3 项目目录规范", link: "/frontend/other/project-structure" },
 ];
 
-const backendDevelopmentStandard = {
-  text: "Java开发标准",
-  link: "/backend/standards/",
-};
+const backendStandardsPath = "/backend/standards/";
+
+const backendStandards = [
+  { text: "编码规约", link: "/backend/standards/coding-guidelines" },
+  { text: "异常日志", link: "/backend/standards/exception-logging" },
+  { text: "单元测试", link: "/backend/standards/unit-testing" },
+  { text: "安全规范", link: "/backend/standards/security" },
+  { text: "MySQL 数据库", link: "/backend/standards/mysql" },
+  { text: "工程结构", link: "/backend/standards/project-structure" },
+];
 
 const backendOtherStandards = [
   { text: "接口文档标准", link: "/backend/other/api-standard" },
   { text: "技术方案标准", link: "/backend/other/technical-design" },
   { text: "接口权限标准", link: "/backend/other/api-permission-design" },
-  { text: "后端绩效考核", link: "/backend/other/performance" },
 ];
+
+const frontendPerformancePath = "/performance/frontend/performance";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   lang: "zh-CN",
   title: "研发规范",
   description: "技术开发指南",
-  vite: {
-    plugins: [tailwindcss()],
-  },
   markdown: {
     config(md) {
       md.core.ruler.before("inline", "rule_badges", (state) => {
@@ -72,7 +75,7 @@ export default defineConfig({
       {
         text: "后端标准",
         activeMatch: "^/backend/",
-        link: backendDevelopmentStandard.link,
+        link: backendStandardsPath,
       },
       {
         text: "前端标准",
@@ -80,6 +83,11 @@ export default defineConfig({
         link: frontendHtmlPath,
       },
       { text: "版本号规范", link: "/changelog/" },
+      {
+        text: "绩效考核",
+        activeMatch: "^/performance/",
+        link: frontendPerformancePath,
+      },
     ],
 
     sidebar: {
@@ -88,8 +96,21 @@ export default defineConfig({
         { text: "专项标准", items: frontendOtherStandards },
       ],
       "/backend/": [
-        { text: "后端开发标准", items: [backendDevelopmentStandard] },
+        {
+          text: "后端开发标准",
+          link: backendStandardsPath,
+          items: backendStandards,
+        },
         { text: "专项标准", items: backendOtherStandards },
+      ],
+      "/performance/": [
+        {
+          text: "绩效考核",
+          items: [
+            { text: "前端绩效考核", link: frontendPerformancePath },
+            { text: "后端绩效考核", link: "/performance/backend/performance" },
+          ],
+        },
       ],
     },
 

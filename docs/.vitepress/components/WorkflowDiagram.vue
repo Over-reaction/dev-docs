@@ -1,23 +1,25 @@
 <template>
   <FullscreenPreview v-slot="{ isOpen, openPreview }" :title="label" inline-controls>
-    <div class="workflow-diagram overflow-hidden rounded-[8px] border border-divider"
-      :class="{ 'has-stages': stages.length, 'is-fullscreen': isOpen }" role="group" :aria-label="label">
-      <div class="workflow-toolbar flex flex-wrap justify-end gap-[8px] border-b border-divider p-[8px]">
-        <div v-if="stages.length" class="workflow-stage-buttons me-auto flex flex-wrap gap-[8px]" role="group"
+    <div class="workflow-diagram"
+      :class="{ 'workflow-diagram--staged': stages.length, 'workflow-diagram--fullscreen': isOpen }"
+      role="group" :aria-label="label">
+      <div class="workflow-diagram__toolbar">
+        <div v-if="stages.length" class="workflow-diagram__controls workflow-diagram__controls--stages" role="group"
           aria-label="定位到流程阶段">
-          <button v-for="stage in stages" :key="stage.id" type="button" :data-workflow-stage="stage.data.stageId"
-            @click="canvas?.focusStage(stage.id)">
+          <button v-for="stage in stages" :key="stage.id" class="workflow-diagram__button" type="button"
+            :data-workflow-stage="stage.data.stageId" @click="canvas?.focusStage(stage.id)">
             {{ stage.data.label }}
           </button>
         </div>
-        <div class="workflow-zoom-buttons flex flex-wrap gap-[8px]" role="group" aria-label="画布视图">
-          <button type="button" aria-label="放大流程图" @click="canvas?.zoomIn()">+</button>
-          <button type="button" aria-label="缩小流程图" @click="canvas?.zoomOut()">−</button>
-          <button type="button" @click="canvas?.fitView()">查看全图</button>
-          <button v-show="!isOpen" type="button" aria-haspopup="dialog" @click="openPreview">全屏预览</button>
+        <div class="workflow-diagram__controls" role="group" aria-label="画布视图">
+          <button class="workflow-diagram__button" type="button" aria-label="放大流程图" @click="canvas?.zoomIn()">+</button>
+          <button class="workflow-diagram__button" type="button" aria-label="缩小流程图" @click="canvas?.zoomOut()">−</button>
+          <button class="workflow-diagram__button" type="button" @click="canvas?.fitView()">查看全图</button>
+          <button v-show="!isOpen" class="workflow-diagram__button" type="button" aria-haspopup="dialog"
+            @click="openPreview">全屏预览</button>
         </div>
       </div>
-      <div class="workflow-viewport h-[clamp(240px,32vw,340px)]">
+      <div class="workflow-diagram__viewport">
         <WorkflowCanvas ref="canvas" :nodes="nodes" :edges="edges" :stages="stages" />
       </div>
     </div>
@@ -40,30 +42,68 @@ const canvas = ref(null);
 </script>
 
 <style scoped>
-@reference "../theme/tailwind.css";
-
-.workflow-toolbar button {
-  @apply min-w-[36px] rounded-[6px] border border-divider bg-surface-soft px-[10px] py-[4px] text-[14px] leading-[24px];
+.workflow-diagram {
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
 }
 
-.workflow-stage-buttons button[data-workflow-stage] {
-  @apply border-stage-accent bg-stage-surface;
+.workflow-diagram__toolbar,
+.workflow-diagram__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.workflow-toolbar button:hover,
-.workflow-toolbar button:focus-visible {
-  @apply border-brand;
+.workflow-diagram__toolbar {
+  justify-content: flex-end;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 8px;
 }
 
-.has-stages .workflow-viewport {
+.workflow-diagram__controls--stages {
+  margin-inline-end: auto;
+}
+
+.workflow-diagram__button {
+  min-width: 36px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background-color: var(--vp-c-bg-soft);
+  padding: 4px 10px;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.workflow-diagram__button[data-workflow-stage] {
+  border-color: var(--workflow-stage-accent, var(--vp-c-brand-1));
+  background-color: var(--workflow-stage-surface, var(--vp-c-bg));
+}
+
+.workflow-diagram__button:hover,
+.workflow-diagram__button:focus-visible {
+  border-color: var(--vp-c-brand-1);
+}
+
+.workflow-diagram__viewport {
+  height: clamp(240px, 32vw, 340px);
+}
+
+.workflow-diagram--staged .workflow-diagram__viewport {
   height: clamp(420px, 62vh, 680px);
 }
 
-.workflow-diagram.is-fullscreen {
-  @apply flex h-full flex-col rounded-none border-none border-current;
+.workflow-diagram--fullscreen {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  border: 0;
+  border-radius: 0;
 }
 
-.workflow-diagram.is-fullscreen .workflow-viewport {
-  @apply h-auto min-h-0 flex-1;
+.workflow-diagram--fullscreen .workflow-diagram__viewport {
+  height: auto;
+  min-height: 0;
+  flex: 1;
 }
 </style>

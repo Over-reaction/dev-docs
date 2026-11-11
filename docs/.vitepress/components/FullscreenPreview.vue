@@ -1,14 +1,12 @@
 <template>
-  <div v-if="!inlineControls" class="mt-4 flex justify-end">
+  <div v-if="!inlineControls" class="fullscreen-preview-trigger">
     <button class="fullscreen-preview-button" type="button" aria-haspopup="dialog" @click="openPreview">
       全屏预览
     </button>
   </div>
 
-  <dialog ref="dialog" class="fullscreen-preview-dialog" :aria-label="title" @close="handleClose">
-    <header
-      class="flex items-center justify-between gap-4 border-b border-divider px-4 py-3"
-    >
+  <dialog ref="dialog" class="fullscreen-preview" :aria-label="title" @close="handleClose">
+    <header class="fullscreen-preview__header">
       <strong>{{ title }}</strong>
       <button class="fullscreen-preview-button" type="button" autofocus @click="dialog.close()">
         退出全屏
@@ -16,8 +14,8 @@
     </header>
     <div
       :id="contentId"
-      class="min-h-0 flex-1 overscroll-contain"
-      :class="inlineControls ? 'overflow-hidden' : 'overflow-auto px-4'"
+      class="fullscreen-preview__content"
+      :class="{ 'fullscreen-preview__content--scrollable': !inlineControls }"
     ></div>
   </dialog>
 
@@ -51,32 +49,76 @@ async function handleClose() {
   opener?.focus();
 }
 </script>
+
 <style scoped>
-@reference "../theme/tailwind.css";
+.fullscreen-preview-trigger {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
 
 .fullscreen-preview-button {
-  @apply shrink-0 rounded-md border border-divider bg-surface-soft px-3 py-1.5 text-[0.875rem] font-semibold text-content;
+  flex-shrink: 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0.375rem;
+  background-color: var(--vp-c-bg-soft);
+  padding: 0.375rem 0.75rem;
+  color: var(--vp-c-text-1);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .fullscreen-preview-button:hover {
-  @apply border-brand;
+  border-color: var(--vp-c-brand-1);
 }
 
 .fullscreen-preview-button:focus-visible {
-  @apply outline-2 outline-offset-2 outline-brand;
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
 }
 
-.fullscreen-preview-dialog {
-  @apply fixed inset-0 m-0 max-h-none w-full max-w-none border-none bg-surface p-0 text-content;
+.fullscreen-preview {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
   height: 100%;
   height: 100dvh;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  background-color: var(--vp-c-bg);
+  padding: 0;
+  color: var(--vp-c-text-1);
 }
 
-.fullscreen-preview-dialog[open] {
-  @apply flex flex-col;
+.fullscreen-preview[open] {
+  display: flex;
+  flex-direction: column;
 }
 
-:global(html:has(.fullscreen-preview-dialog[open])) {
-  @apply overflow-hidden;
+.fullscreen-preview__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 0.75rem 1rem;
+}
+
+.fullscreen-preview__content {
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.fullscreen-preview__content--scrollable {
+  overflow: auto;
+  padding-inline: 1rem;
+}
+
+:global(html:has(.fullscreen-preview[open])) {
+  overflow: hidden;
 }
 </style>

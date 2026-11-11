@@ -1,7 +1,7 @@
 <template>
-  <main class="workflow-page vp-doc mx-auto max-w-[1520px] px-[clamp(16px,4vw,48px)] pt-[32px] pb-[64px]">
-    <nav class="workflow-links mb-[24px] flex flex-wrap gap-[8px]" aria-label="工作流程">
-      <a v-for="page in pages" :key="page.id" :href="pageHref(page.url)"
+  <main class="workflow-page vp-doc">
+    <nav class="workflow-page__links" aria-label="工作流程">
+      <a v-for="page in pages" :key="page.id" class="workflow-page__link" :href="pageHref(page.url)"
         :aria-current="current === page.id ? 'page' : undefined">{{ page.label }}</a>
     </nav>
     <slot name="intro" />
@@ -36,18 +36,36 @@ function pageHref(url) {
 </script>
 
 <style scoped>
-@reference "../theme/tailwind.css";
-
-.workflow-links a {
-  @apply rounded-[6px] border border-divider px-[16px] py-[4px] font-semibold text-content-muted no-underline;
+.workflow-page {
+  max-width: 1520px;
+  margin-inline: auto;
+  padding-block: 32px 64px;
+  padding-inline: clamp(16px, 4vw, 48px);
 }
 
-.workflow-links a:hover,
-.workflow-links a[aria-current="page"] {
-  @apply border-brand text-brand;
+.workflow-page__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
-.workflow-links a[aria-current="page"] {
-  @apply bg-brand-soft;
+.workflow-page__link {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 4px 16px;
+  color: var(--vp-c-text-2);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.workflow-page__link:hover,
+.workflow-page__link[aria-current="page"] {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+
+.workflow-page__link[aria-current="page"] {
+  background-color: var(--vp-c-brand-soft);
 }
 </style>

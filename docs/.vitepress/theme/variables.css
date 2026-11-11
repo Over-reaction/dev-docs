@@ -1,18 +1,7 @@
 /* 在此文件的 :root 和 :root.dark 中覆盖 --vp-c-*，可同时定制默认主题和自定义组件。
    更换品牌色时，配套调整 --vp-c-brand-1、--vp-c-brand-2、--vp-c-brand-3 和 --vp-c-brand-soft。 */
-@theme inline {
-  --color-brand: var(--vp-c-brand-1);
-  --color-brand-soft: var(--vp-c-brand-soft);
-  --color-surface: var(--vp-c-bg);
-  --color-surface-soft: var(--vp-c-bg-soft);
-  --color-content: var(--vp-c-text-1);
-  --color-content-muted: var(--vp-c-text-2);
-  --color-divider: var(--vp-c-divider);
-  --color-stage-accent: var(--workflow-stage-accent, var(--vp-c-brand-1));
-  --color-stage-surface: var(--workflow-stage-surface, var(--vp-c-bg));
-}
-
 /* 登记与沟通 */
+
 [data-workflow-stage="1"] {
   --workflow-stage-accent: #2563eb;
   --workflow-stage-surface: #eff6ff;
@@ -68,4 +57,12 @@
     var(--vp-c-brand-soft),
     transparent 70%
   );
+}
+
+.standards-home .VPFeature {
+  border-color: var(--vp-c-divider);
+}
+
+/* .vitepress/theme/custom.css */
+:root {
 }
