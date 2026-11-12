@@ -17,7 +17,13 @@ outline: [2, 4]
 3. [单元测试](./unit-testing.md)
 4. [安全规范](./security.md)
 5. [MySQL 数据库](./mysql.md)
-6. [工程结构](./project-structure.md)
+
+## 专项标准
+
+- [通用工程标准](/backend/other/project-structure)
+- [单体项目结构标准](/backend/other/monolith-project-structure)
+- [微服务项目结构标准](/backend/other/microservice-project-structure)
+- [客户端项目结构标准](/backend/other/client-project-structure)
 
 ## 参考文献
 
