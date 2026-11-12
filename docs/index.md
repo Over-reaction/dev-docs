@@ -4,20 +4,24 @@ layout: home
 pageClass: standards-home
 
 hero:
-  name: 广州一千河科技有限公司研发规范
+  name: 研发规范
+  company: 广州一千河科技有限公司
   tagline: 查阅研发工作流程、开发标准与版本号管理规范
   image:
-    src: /standards-hero.svg
+    src: /standards-paper.jpg
     alt: ""
+    decoding: async
+    width: 1200
+    height: 800
   actions:
     - theme: brand
-      text: 查阅后端标准
+      text: 后端标准
       link: /backend/standards/
     - theme: brand
-      text: 查阅前端标准
+      text: 前端标准
       link: /frontend/standards/html
     - theme: alt
-      text: 查看版本号规范
+      text: 版本号规范
       link: /changelog/
 
 features:

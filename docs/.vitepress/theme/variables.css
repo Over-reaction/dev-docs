@@ -45,24 +45,6 @@
   --workflow-stage-surface: #382b17;
 }
 
-.standards-home {
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(
-    110deg,
-    var(--vp-c-brand-1),
-    var(--vp-c-text-1)
-  );
-  --vp-home-hero-image-background-image: radial-gradient(
-    ellipse,
-    var(--vp-c-brand-soft),
-    transparent 70%
-  );
-}
-
-.standards-home .VPFeature {
-  border-color: var(--vp-c-divider);
-}
-
 /* .vitepress/theme/custom.css */
 :root {
 }
