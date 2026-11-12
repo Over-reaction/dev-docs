@@ -4,7 +4,7 @@
   --standards-home-surface: #fff;
   --standards-home-ink: #17233b;
   --standards-home-accent: #244ec7;
-  --standards-home-image-glow: rgb(55 105 231 / 18%);
+  --standards-home-image-glow: rgb(55 105 231 / 12%);
   --standards-home-company-gradient: linear-gradient(
     110deg,
     #145bb7,
@@ -23,7 +23,7 @@
   --standards-home-surface: #202631;
   --standards-home-ink: #f0f3fb;
   --standards-home-accent: #9db6ff;
-  --standards-home-image-glow: rgb(58 109 248 / 30%);
+  --standards-home-image-glow: rgb(58 109 248 / 22%);
   --standards-home-company-gradient: linear-gradient(
     110deg,
     #55baff,
@@ -84,9 +84,9 @@
 
 .standards-home .VPHomeHero .image-bg {
   z-index: -1;
-  inset: -14% auto auto -1.5rem;
-  width: 52%;
-  height: 54%;
+  inset: auto 7% 4%;
+  width: auto;
+  height: 47%;
   background-image: radial-gradient(
     ellipse closest-side,
     var(--standards-home-image-glow),
@@ -103,8 +103,7 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  border-radius: 0.875rem;
-  object-fit: cover;
+  object-fit: contain;
   transform: none;
 }
 

@@ -8,11 +8,11 @@ hero:
   company: 广州一千河科技有限公司
   tagline: 查阅研发工作流程、开发标准与版本号管理规范
   image:
-    src: /standards-paper.jpg
-    alt: ""
+    src: /standards-handbook-refined.png
+    alt: "一本展开的研发手册，左页是检查清单，右页是流程图。"
     decoding: async
-    width: 1200
-    height: 800
+    width: 1080
+    height: 720
   actions:
     - theme: brand
       text: 后端标准

@@ -1,7 +1,3 @@
----
-aside: false
----
-
 <script setup>
 import DirectoryTree from "../../.vitepress/components/DirectoryTree.vue";
 
@@ -100,7 +96,13 @@ const projectStructure = [
 ];
 </script>
 
-# Vue 3 项目目录规范
+# Vue3 项目结构标准
+
+## 文档版本
+
+| 版本号 | 修订时间   | 修订者 | 备注 |
+| ------ | ---------- | ------ | ---- |
+| V1.0.0 | 2026/11/12 | 金晨   | 初稿 |
 
 以 Vue 3、Vite 和 JavaScript 的单应用项目为例。点击带有子项的目录行可展开或收起目录。
 

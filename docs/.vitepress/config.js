@@ -1,13 +1,16 @@
 import { defineConfig } from "vitepress";
 
+// 将规范条目的标记映射为 VitePress 徽标样式。
 const ruleBadgeTypes = {
   强制: "danger",
   推荐: "warning",
   参考: "note",
 };
 
+// 顶部「前端标准」入口直接打开前端开发标准的第一篇文档。
 const frontendHtmlPath = "/frontend/standards/html";
 
+// 前端侧边栏的开发标准与专项标准分别维护在两个列表中。
 const frontendStandards = [
   { text: "HTML", link: frontendHtmlPath },
   { text: "CSS", link: "/frontend/standards/css" },
@@ -21,8 +24,10 @@ const frontendOtherStandards = [
   { text: "Vue 3 项目目录规范", link: "/frontend/other/project-structure" },
 ];
 
+// 后端标准的顶部入口与侧边栏分组标题共用概览页。
 const backendStandardsPath = "/backend/standards/";
 
+// 后端侧边栏的开发标准与专项标准分别维护在两个列表中。
 const backendStandards = [
   { text: "编码规约", link: "/backend/standards/coding-guidelines" },
   { text: "异常日志", link: "/backend/standards/exception-logging" },
@@ -38,15 +43,18 @@ const backendOtherStandards = [
   { text: "接口权限标准", link: "/backend/other/api-permission-design" },
 ];
 
+// 顶部「绩效考核」入口默认打开前端绩效考核页。
 const frontendPerformancePath = "/performance/frontend/performance";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  // 站点的默认语言、标题和描述。
   lang: "zh-CN",
   title: "研发规范",
   description: "技术开发指南",
   markdown: {
     config(md) {
+      // 在 Markdown 行内解析前，将段落开头的 **【强制】**、**【推荐】** 或 **【参考】** 转为徽标。
       md.core.ruler.before("inline", "rule_badges", (state) => {
         for (const [index, token] of state.tokens.entries()) {
           if (
@@ -65,6 +73,7 @@ export default defineConfig({
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    // 顶部导航的 link 是点击后的跳转地址，activeMatch 用正则匹配栏目内应高亮该入口的页面。
     nav: [
       { text: "首页", link: "/" },
       {
@@ -82,6 +91,7 @@ export default defineConfig({
         activeMatch: "^/frontend/",
         link: frontendHtmlPath,
       },
+      { text: "测试职责", link: "/testing/" },
       { text: "版本号规范", link: "/changelog/" },
       {
         text: "绩效考核",
@@ -90,6 +100,7 @@ export default defineConfig({
       },
     ],
 
+    // 按页面路径前缀选择侧边栏，每个前缀下可以配置多个分组。
     sidebar: {
       "/frontend/": [
         { text: "前端开发标准", items: frontendStandards },
@@ -114,6 +125,7 @@ export default defineConfig({
       ],
     },
 
+    // 在顶部导航显示指向项目仓库的 GitHub 图标。
     socialLinks: [
       { icon: "github", link: "https://github.com/Over-reaction/dev-docs" },
     ],
