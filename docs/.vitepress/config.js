@@ -52,6 +52,11 @@ export default defineConfig({
   lang: "zh-CN",
   title: "研发规范",
   description: "技术开发指南",
+  vite: {
+    server: {
+      proxy: { "/api/ask": `http://127.0.0.1:${process.env.DOCS_PORT || 3001}` },
+    },
+  },
   markdown: {
     config(md) {
       // 在 Markdown 行内解析前，将段落开头的 **【强制】**、**【推荐】** 或 **【参考】** 转为徽标。

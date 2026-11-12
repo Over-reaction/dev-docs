@@ -4,6 +4,10 @@ node_modules/
 # VitePress cache and build output
 /docs/.vitepress/cache/
 /docs/.vitepress/dist/
+/.doc-search/
+
+# Local model credentials
+/.env
 
 # macOS metadata
 .DS_Store
