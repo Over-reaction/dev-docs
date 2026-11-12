@@ -7,3 +7,5 @@ node_modules/
 
 # macOS metadata
 .DS_Store
+
+.idea

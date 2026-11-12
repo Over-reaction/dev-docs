@@ -34,13 +34,16 @@ const backendStandards = [
   { text: "单元测试", link: "/backend/standards/unit-testing" },
   { text: "安全规范", link: "/backend/standards/security" },
   { text: "MySQL 数据库", link: "/backend/standards/mysql" },
-  { text: "工程结构", link: "/backend/standards/project-structure" },
 ];
 
 const backendOtherStandards = [
   { text: "接口文档标准", link: "/backend/other/api-standard" },
   { text: "技术方案标准", link: "/backend/other/technical-design" },
   { text: "接口权限标准", link: "/backend/other/api-permission-design" },
+  { text: "通用工程标准", link: "/backend/other/project-structure" },
+  { text: "单体项目结构标准", link: "/backend/other/monolith-project-structure" },
+  { text: "微服务项目结构标准", link: "/backend/other/microservice-project-structure" },
+  { text: "客户端项目结构标准", link: "/backend/other/client-project-structure" },
 ];
 
 // 顶部「绩效考核」入口默认打开前端绩效考核页。

@@ -30,7 +30,7 @@ features:
     link: /workflow/
     linkText: 查看工作流程
   - title: 后端标准
-    details: 查阅 Java 开发规范、接口文档标准、技术方案标准和接口权限标准。
+    details: 查阅 Java 开发规范、通用工程标准、项目结构标准、接口文档标准和接口权限标准。
     link: /backend/standards/
     linkText: 查看规范
   - title: 前端标准
