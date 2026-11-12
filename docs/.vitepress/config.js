@@ -49,6 +49,9 @@ const backendOtherStandards = [
 // 顶部「绩效考核」入口默认打开前端绩效考核页。
 const frontendPerformancePath = "/performance/frontend/performance";
 
+// 顶部「岗位职责」入口默认打开测试岗职责页。
+const testingResponsibilitiesPath = "/responsibilities/testing";
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   // 站点的默认语言、标题和描述。
@@ -94,7 +97,11 @@ export default defineConfig({
         activeMatch: "^/frontend/",
         link: frontendHtmlPath,
       },
-      { text: "测试职责", link: "/testing/" },
+      {
+        text: "岗位职责",
+        activeMatch: "^/responsibilities/",
+        link: testingResponsibilitiesPath,
+      },
       { text: "版本号规范", link: "/changelog/" },
       {
         text: "绩效考核",
@@ -116,6 +123,25 @@ export default defineConfig({
           items: backendStandards,
         },
         { text: "专项标准", items: backendOtherStandards },
+      ],
+      "/responsibilities/": [
+        {
+          text: "岗位职责",
+          items: [
+            { text: "测试岗", link: testingResponsibilitiesPath },
+            {
+              text: "研发运维岗",
+              link: "/responsibilities/devops",
+              collapsed: false,
+              items: [
+                {
+                  text: "专业术语说明",
+                  link: "/responsibilities/devops-glossary",
+                },
+              ],
+            },
+          ],
+        },
       ],
       "/performance/": [
         {

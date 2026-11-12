@@ -1,8 +1,0 @@
-/* 测试页的多列表格使用站点的布局宽度。 */
-.testing-doc .VPDoc:not(.has-sidebar, .has-aside) > .container {
-  max-width: var(--vp-layout-max-width);
-}
-
-.testing-doc .VPDoc:not(.has-sidebar, .has-aside) > .container > .content {
-  max-width: none;
-}

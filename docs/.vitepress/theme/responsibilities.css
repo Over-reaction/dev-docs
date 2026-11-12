@@ -1,0 +1,15 @@
+/* 岗位职责页的多列表格使用侧边栏之外的可用宽度。 */
+.responsibilities-doc .VPDoc:not(.has-aside) > .container {
+  max-width: var(--vp-layout-max-width);
+}
+
+.responsibilities-doc .VPDoc:not(.has-aside) > .container > .content,
+.responsibilities-doc .VPDoc:not(.has-aside) .content-container {
+  max-width: none;
+}
+
+/* 分章节的职责页为表格首列保留宽度，避免环境和职责名称逐字换行。 */
+.responsibilities-doc--detailed .vp-doc th:first-child,
+.responsibilities-doc--detailed .vp-doc td:first-child {
+  min-width: 7rem;
+}

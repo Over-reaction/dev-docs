@@ -1,8 +1,7 @@
 ---
 layout: doc
-sidebar: false
 aside: false
-pageClass: testing-doc
+pageClass: responsibilities-doc
 ---
 
 # 测试岗位职责表

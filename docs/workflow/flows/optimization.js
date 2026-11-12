@@ -238,7 +238,7 @@ export const optimizationFlow = {
     {
       id: "43",
       position: { x: 2464.4, y: 304 },
-      data: { label: "研发发布上线", stageId: "4" },
+      data: { label: "研发运维\n发布上线", stageId: "4" },
     },
     {
       id: "44",
