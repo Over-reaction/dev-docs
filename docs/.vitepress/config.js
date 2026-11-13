@@ -61,6 +61,9 @@ const frontendPerformancePath = "/performance/frontend/performance";
 // 顶部「岗位职责」入口默认打开测试岗职责页。
 const testingResponsibilitiesPath = "/responsibilities/testing";
 
+// 顶部「量化公式」入口默认打开新人入职页。
+const newcomerFormulaPath = "/quantitativeFormula/newcomer";
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   // 站点的默认语言、标题和描述。
@@ -111,6 +114,11 @@ export default defineConfig({
         activeMatch: "^/responsibilities/",
         link: testingResponsibilitiesPath,
       },
+      {
+        text: "量化公式",
+        activeMatch: "^/quantitativeFormula/",
+        link: newcomerFormulaPath,
+      },
       { text: "版本号规范", link: "/changelog/" },
       {
         text: "绩效考核",
@@ -150,6 +158,12 @@ export default defineConfig({
               ],
             },
           ],
+        },
+      ],
+      "/quantitativeFormula/": [
+        {
+          text: "量化公式",
+          items: [{ text: "新人入职", link: newcomerFormulaPath }],
         },
       ],
       "/performance/": [
