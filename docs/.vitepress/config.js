@@ -20,7 +20,7 @@ const frontendStandards = [
 ];
 
 const frontendOtherStandards = [
-  { text: "前端技术方案标准", link: "/frontend/other/technical-design" },
+  { text: "技术方案标准", link: "/frontend/other/technical-design" },
   { text: "Vue 3 项目结构标准", link: "/frontend/other/project-structure" },
 ];
 
@@ -55,8 +55,8 @@ const backendOtherStandards = [
   },
 ];
 
-// 顶部「绩效考核」入口默认打开前端绩效考核页。
-const frontendPerformancePath = "/performance/frontend/performance";
+// 顶部「绩效考核」入口默认打开后端绩效考核页。
+const backendPerformancePath = "/performance/performance-backend";
 
 // 顶部「岗位职责」入口默认打开测试岗职责页。
 const testingResponsibilitiesPath = "/responsibilities/testing";
@@ -123,7 +123,7 @@ export default defineConfig({
       {
         text: "绩效考核",
         activeMatch: "^/performance/",
-        link: frontendPerformancePath,
+        link: backendPerformancePath,
       },
     ],
 
@@ -170,8 +170,15 @@ export default defineConfig({
         {
           text: "绩效考核",
           items: [
-            { text: "前端绩效考核", link: frontendPerformancePath },
-            { text: "后端绩效考核", link: "/performance/backend/performance" },
+            { text: "后端绩效考核", link: backendPerformancePath },
+            { text: "前端绩效考核", link: "/performance/performance-frontend" },
+          ],
+        },
+        {
+          text: "评分依据",
+          items: [
+            { text: "测试缺陷等级量化标准", link: "/performance/test-defect" },
+            { text: "问题清单类型合并", link: "/performance/question-list" },
           ],
         },
       ],

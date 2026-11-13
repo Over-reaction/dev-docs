@@ -34,7 +34,7 @@ features:
     link: /backend/standards/
     linkText: 查看规范
   - title: 前端标准
-    details: 查阅 HTML、CSS、JavaScript、Vue 3、微信小程序开发规范和前端技术方案标准。
+    details: 查阅 HTML、CSS、JavaScript、Vue 3、微信小程序开发规范和技术方案标准。
     link: /frontend/standards/html
     linkText: 查看规范
   # - title: 岗位职责
