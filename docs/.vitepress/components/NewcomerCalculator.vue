@@ -3,7 +3,7 @@ import { computed, nextTick, reactive, ref, useId, watch } from "vue";
 
 const fields = [
   { key: "B", label: "基础熟悉时间", unit: "天" },
-  { key: "P", label: "功能复杂度总分", unit: "分" },
+  { key: "P", label: "项目功能复杂度总分", unit: "分" },
   { key: "E", label: "每天预计熟悉的功能分值", unit: "分/天" },
   { key: "I", label: "额外技术复杂度时间", unit: "天" },
   { key: "Tmin", label: "最短熟悉周期", unit: "天" },
