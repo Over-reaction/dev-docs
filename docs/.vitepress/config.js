@@ -21,7 +21,7 @@ const frontendStandards = [
 
 const frontendOtherStandards = [
   { text: "前端技术方案标准", link: "/frontend/other/technical-design" },
-  { text: "Vue 3 项目目录规范", link: "/frontend/other/project-structure" },
+  { text: "Vue 3 项目结构标准", link: "/frontend/other/project-structure" },
 ];
 
 // 后端标准的顶部入口与侧边栏分组标题共用概览页。
@@ -41,9 +41,18 @@ const backendOtherStandards = [
   { text: "技术方案标准", link: "/backend/other/technical-design" },
   { text: "接口权限标准", link: "/backend/other/api-permission-design" },
   { text: "通用工程标准", link: "/backend/other/project-structure" },
-  { text: "单体项目结构标准", link: "/backend/other/monolith-project-structure" },
-  { text: "微服务项目结构标准", link: "/backend/other/microservice-project-structure" },
-  { text: "客户端项目结构标准", link: "/backend/other/client-project-structure" },
+  {
+    text: "单体项目结构标准",
+    link: "/backend/other/monolith-project-structure",
+  },
+  {
+    text: "微服务项目结构标准",
+    link: "/backend/other/microservice-project-structure",
+  },
+  {
+    text: "客户端项目结构标准",
+    link: "/backend/other/client-project-structure",
+  },
 ];
 
 // 顶部「绩效考核」入口默认打开前端绩效考核页。

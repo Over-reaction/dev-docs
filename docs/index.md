@@ -37,10 +37,10 @@ features:
     details: 查阅 HTML、CSS、JavaScript、Vue 3、微信小程序开发规范和前端技术方案标准。
     link: /frontend/standards/html
     linkText: 查看规范
-  - title: 岗位职责
-    details: 明确测试岗、研发运维岗的职责范围、工作产出与协作边界。
-    link: /responsibilities/testing
-    linkText: 查看岗位职责
+  # - title: 岗位职责
+  #   details: 明确测试岗、研发运维岗的职责范围、工作产出与协作边界。
+  #   link: /responsibilities/testing
+  #   linkText: 查看岗位职责
   - title: 版本号规范
     details: 查阅版本号升级规则、发布批次的计算方式和测试版本命名。
     link: /changelog/
