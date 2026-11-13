@@ -24,20 +24,27 @@ export function embeddingId(config) {
 }
 
 async function postModel(config, path, body, signal) {
+  const endpoint = new URL(`${config.baseUrl}/${path}`);
+  const started = performance.now();
   const timeout = AbortSignal.timeout(30_000);
   const headers = { "Content-Type": "application/json" };
   if (config.apiKey) headers.Authorization = `Bearer ${config.apiKey}`;
-  const response = await fetch(`${config.baseUrl}/${path}`, {
+  const response = await fetch(endpoint, {
     method: "POST",
     headers,
     body: JSON.stringify({ model: config.model, ...body }),
     signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
   });
-  if (!response.ok) {
-    await response.body?.cancel();
-    throw new Error(`${path} 返回 HTTP ${response.status}`);
+  try {
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw new Error(`${path} 返回 HTTP ${response.status}`);
+    }
+    return await response.json();
+  } finally {
+    const elapsed = Math.round(performance.now() - started);
+    console.info(`[模型请求] POST /${path} · ${endpoint.origin} · HTTP ${response.status} · ${elapsed} ms`);
   }
-  return response.json();
 }
 
 export async function embed(config, input, signal) {
@@ -63,20 +70,24 @@ export async function generateAnswer(config, question, sections, signal) {
     heading,
     text,
   }));
-  const result = await postModel(config, "chat/completions", {
+  const body = {
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: instructions },
       { role: "user", content: JSON.stringify({ question, sources }) },
     ],
-  }, signal);
+  };
 
-  const content = result.choices?.[0]?.message?.content;
   let answer;
-  try {
-    answer = JSON.parse(content);
-  } catch {
-    throw new Error("生成模型未返回有效的 JSON 对象。");
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const result = await postModel(config, "chat/completions", body, signal);
+    try {
+      answer = JSON.parse(result.choices?.[0]?.message?.content ?? "");
+      break;
+    } catch {
+      if (attempt === 1) throw new Error("生成模型未返回有效的 JSON 对象。");
+      console.warn("[模型请求] 返回的正文无法解析为 JSON，重试一次。");
+    }
   }
   if (typeof answer?.answer !== "string" || !answer.answer.trim() ||
     !Array.isArray(answer.sourceIds) || !answer.sourceIds.every((id) => typeof id === "string")) {
