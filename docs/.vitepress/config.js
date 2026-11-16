@@ -55,14 +55,30 @@ const backendOtherStandards = [
   },
 ];
 
-// 顶部「绩效考核」入口默认打开后端绩效考核页。
-const backendPerformancePath = "/performance/performance-backend";
+// 顶部「绩效考核」入口默认打开新人入职页。
+const newcomerFormulaPath = "/performance/quantitativeFormula";
+
+// 新人入职页沿用原有地址，与绩效考核页面共用侧边栏。
+const performanceSidebar = [
+  {
+    text: "绩效考核",
+    items: [
+      { text: "新人入职", link: newcomerFormulaPath },
+      { text: "后端绩效考核", link: "/performance/performance-backend" },
+      { text: "前端绩效考核", link: "/performance/performance-frontend" },
+    ],
+  },
+  {
+    text: "评分依据",
+    items: [
+      { text: "测试缺陷等级量化标准", link: "/performance/test-defect" },
+      { text: "问题清单类型合并", link: "/performance/question-list" },
+    ],
+  },
+];
 
 // 顶部「岗位职责」入口默认打开测试岗职责页。
 const testingResponsibilitiesPath = "/responsibilities/testing";
-
-// 顶部「量化公式」入口默认打开新人入职页。
-const newcomerFormulaPath = "/quantitativeFormula/newcomer";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -114,16 +130,11 @@ export default defineConfig({
         activeMatch: "^/responsibilities/",
         link: testingResponsibilitiesPath,
       },
-      {
-        text: "量化公式",
-        activeMatch: "^/quantitativeFormula/",
-        link: newcomerFormulaPath,
-      },
       { text: "版本号规范", link: "/changelog/" },
       {
         text: "绩效考核",
-        activeMatch: "^/performance/",
-        link: backendPerformancePath,
+        activeMatch: "^/(performance|quantitativeFormula)/",
+        link: newcomerFormulaPath,
       },
     ],
 
@@ -160,28 +171,7 @@ export default defineConfig({
           ],
         },
       ],
-      "/quantitativeFormula/": [
-        {
-          text: "量化公式",
-          items: [{ text: "新人入职", link: newcomerFormulaPath }],
-        },
-      ],
-      "/performance/": [
-        {
-          text: "绩效考核",
-          items: [
-            { text: "后端绩效考核", link: backendPerformancePath },
-            { text: "前端绩效考核", link: "/performance/performance-frontend" },
-          ],
-        },
-        {
-          text: "评分依据",
-          items: [
-            { text: "测试缺陷等级量化标准", link: "/performance/test-defect" },
-            { text: "问题清单类型合并", link: "/performance/question-list" },
-          ],
-        },
-      ],
+      "/performance/": performanceSidebar,
     },
 
     // 在顶部导航显示指向项目仓库的 GitHub 图标。

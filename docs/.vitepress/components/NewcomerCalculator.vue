@@ -1,120 +1,74 @@
 <script setup>
-import { computed, nextTick, reactive, ref, useId, watch } from "vue";
+import { computed, ref, useId } from "vue";
 
-const fields = [
-  { key: "B", label: "基础熟悉时间", unit: "天" },
-  { key: "P", label: "项目功能复杂度总分", unit: "分" },
-  { key: "E", label: "每天预计熟悉的功能分值", unit: "分/天" },
-  { key: "I", label: "额外技术复杂度时间", unit: "天" },
-  { key: "Tmin", label: "最短熟悉周期", unit: "天" },
-  { key: "Tmax", label: "最长常规熟悉周期", unit: "天" },
-];
-
-const inputId = useId();
-const values = reactive({ B: 1, P: "", E: 8, I: 0, Tmin: 2, Tmax: 5 });
-const showErrors = ref(false);
-const result = ref(null);
-
-watch(values, () => {
-  result.value = null;
+const props = defineProps({
+  projects: { type: Array, required: true },
+  dailyWorkHours: { type: Number, required: true },
 });
 
-const errors = computed(() => {
-  const messages = {};
+const projectSelectId = useId();
+const backgroundDaysId = useId();
+const selectedProjectId = ref("");
+const backgroundDays = ref(1);
+const selectedProject = computed(() =>
+  props.projects.find((project) => project.id === selectedProjectId.value),
+);
+const isBackgroundDaysValid = computed(() =>
+  Number.isFinite(backgroundDays.value) && backgroundDays.value >= 0,
+);
+const result = computed(() => {
+  if (!selectedProject.value || !isBackgroundDaysValid.value) return null;
 
-  for (const { key, label } of fields) {
-    const value = values[key];
-    if (value === "") {
-      messages[key] = `请输入${label}。`;
-    } else if (key === "E" && (!Number.isFinite(value) || value <= 0)) {
-      messages[key] = "请输入大于 0 的数值。";
-    } else if (!Number.isFinite(value) || value < 0) {
-      messages[key] = "请输入大于或等于 0 的数值。";
-    }
-  }
-
-  if (!messages.Tmin && !messages.Tmax && values.Tmin > values.Tmax) {
-    messages.Tmax = "最长周期须大于或等于最短周期。";
-  }
-
-  return messages;
+  return backgroundDays.value + selectedProject.value.familiarityHours / props.dailyWorkHours;
 });
-
-function roundUpDays(base, points, dailyPoints) {
-  // 将十进制输入统一放大为整数，避免浮点误差多算一天。
-  const decimals = [base, points, dailyPoints].map((value) => {
-    const [coefficient, exponent = "0"] = value.toString().split("e");
-    const [whole, fraction = ""] = coefficient.split(".");
-    return {
-      digits: BigInt(whole + fraction),
-      places: fraction.length - Number(exponent),
-    };
-  });
-  const places = Math.max(0, ...decimals.map((decimal) => decimal.places));
-  const scale = 10n ** BigInt(places);
-  const [scaledBase, scaledPoints, scaledDailyPoints] = decimals.map(
-    (decimal) => decimal.digits * 10n ** BigInt(places - decimal.places),
-  );
-  const numerator = scaledBase * scaledDailyPoints + scaledPoints * scale;
-  const denominator = scaledDailyPoints * scale;
-  return (numerator + denominator - 1n) / denominator;
-}
-
-async function calculate(event) {
-  showErrors.value = true;
-  if (Object.keys(errors.value).length) {
-    const form = event.currentTarget;
-    await nextTick();
-    form.querySelector('[aria-invalid="true"]')?.focus();
-    return;
-  }
-
-  const { B, P, E, I, Tmin, Tmax } = values;
-  const roundedDays = roundUpDays(B, P, E);
-  const daysBeforeLimits = roundedDays + BigInt(I);
-  const days = Math.min(Tmax, Math.max(Tmin, Number(daysBeforeLimits)));
-
-  result.value = { days, roundedDays, daysBeforeLimits };
-}
 </script>
 
 <template>
   <div class="newcomer-calculator">
-    <h2 id="parameters">参数与建议值</h2>
+    <h2 id="parameters">熟悉周期计算</h2>
 
-    <form novalidate @submit.prevent="calculate">
-      <div class="newcomer-calculator__fields">
-        <div v-for="field in fields" :key="field.key">
-          <label class="newcomer-calculator__label" :for="`${inputId}-${field.key}`">
-            {{ field.label }}
-            <span class="newcomer-calculator__symbol">
-              <template v-if="field.key.startsWith('T')">T<sub>{{ field.key.slice(1) }}</sub></template>
-              <template v-else>{{ field.key }}</template>
-            </span>
-          </label>
-          <div class="newcomer-calculator__control">
-            <select v-if="field.key === 'I'" :id="`${inputId}-${field.key}`" v-model="values.I"
-              class="newcomer-calculator__input newcomer-calculator__input--select"
-              :aria-describedby="`${inputId}-${field.key}-unit`">
-              <option :value="0">0</option>
-              <option :value="1">1</option>
-            </select>
-            <input v-else :id="`${inputId}-${field.key}`" v-model="values[field.key]" class="newcomer-calculator__input"
-              type="number" required min="0" step="any" inputmode="decimal"
-              :placeholder="field.key === 'P' ? '按项目填写' : undefined"
-              :aria-invalid="showErrors && errors[field.key] ? 'true' : undefined"
-              :aria-describedby="`${inputId}-${field.key}-unit ${inputId}-${field.key}-error`">
-            <span :id="`${inputId}-${field.key}-unit`" class="newcomer-calculator__unit">
-              {{ field.unit }}
-            </span>
-          </div>
-          <div :id="`${inputId}-${field.key}-error`" class="newcomer-calculator__error">{{ showErrors ?
-            errors[field.key] : "" }}
-          </div>
+    <div class="newcomer-calculator__fields">
+      <div>
+        <label class="newcomer-calculator__label" :for="projectSelectId">选择项目</label>
+        <select :id="projectSelectId" v-model="selectedProjectId" class="newcomer-calculator__select">
+          <option disabled value="">请选择项目</option>
+          <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
+        </select>
+      </div>
+      <div>
+        <label class="newcomer-calculator__label" :for="backgroundDaysId">
+          项目背景了解周期 <span class="newcomer-calculator__symbol">B</span>
+        </label>
+        <div class="newcomer-calculator__control">
+          <input :id="backgroundDaysId" v-model="backgroundDays" class="newcomer-calculator__input"
+            type="number" required min="0" step="any" inputmode="decimal"
+            :aria-invalid="!isBackgroundDaysValid"
+            :aria-describedby="`${backgroundDaysId}-unit ${backgroundDaysId}-error`">
+          <span :id="`${backgroundDaysId}-unit`" class="newcomer-calculator__unit">工作日</span>
+        </div>
+        <div :id="`${backgroundDaysId}-error`" class="newcomer-calculator__error">
+          {{ isBackgroundDaysValid ? "" : "请输入大于或等于 0 的数值。" }}
         </div>
       </div>
-      <button class="newcomer-calculator__button" type="submit">确认计算</button>
-    </form>
+      <dl>
+        <dt class="newcomer-calculator__label">
+          项目功能熟悉总时长 <span class="newcomer-calculator__symbol">H</span>
+        </dt>
+        <dd class="newcomer-calculator__value">
+          {{ selectedProject ? `${selectedProject.familiarityHours} 小时` : "请选择项目" }}
+        </dd>
+      </dl>
+      <dl>
+        <dt class="newcomer-calculator__label">每日工作时长 <span class="newcomer-calculator__symbol">W</span></dt>
+        <dd class="newcomer-calculator__value">{{ dailyWorkHours }} 小时/工作日</dd>
+      </dl>
+    </div>
+
+    <div role="status" aria-atomic="true">
+      <div v-if="result !== null" class="newcomer-calculator__result">
+        预计项目熟悉周期 <strong>{{ result }} 个工作日</strong>
+      </div>
+    </div>
 
     <h2 id="formula">计算公式</h2>
 
@@ -122,53 +76,13 @@ async function calculate(event) {
       <math display="block">
         <mi>T</mi>
         <mo>=</mo>
-        <mi>min</mi>
-        <mo>(</mo>
-        <msub>
-          <mi>T</mi>
-          <mi>max</mi>
-        </msub>
-        <mo>,</mo>
-        <mi>max</mi>
-        <mo>(</mo>
-        <msub>
-          <mi>T</mi>
-          <mi>min</mi>
-        </msub>
-        <mo>,</mo>
-        <mrow>
-          <mo>⌈</mo>
-          <mi>B</mi>
-          <mo>+</mo>
-          <mfrac>
-            <mi>P</mi>
-            <mi>E</mi>
-          </mfrac>
-          <mo>⌉</mo>
-        </mrow>
+        <mi>B</mi>
         <mo>+</mo>
-        <mi>I</mi>
-        <mo>)</mo>
-        <mo>)</mo>
+        <mfrac>
+          <mi>H</mi>
+          <mi>W</mi>
+        </mfrac>
       </math>
-    </div>
-
-    <div role="status" aria-atomic="true">
-      <div v-if="result" class="newcomer-calculator__result">
-        <div class="newcomer-calculator__result-title">
-          预计熟悉周期 <strong>{{ result.days }} 天</strong>
-        </div>
-        <div>
-          ⌈{{ values.B }} + {{ values.P }} ÷ {{ values.E }}⌉ = {{ result.roundedDays }} 天，
-          加上 {{ values.I }} 天额外时间后为 {{ result.daysBeforeLimits }} 天。
-          <template v-if="result.daysBeforeLimits < values.Tmin">
-            按最短周期取 {{ values.Tmin }} 天。
-          </template>
-          <template v-else-if="result.daysBeforeLimits > values.Tmax">
-            按最长周期取 {{ values.Tmax }} 天。
-          </template>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -176,8 +90,14 @@ async function calculate(event) {
 <style scoped>
 .newcomer-calculator__fields {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px 20px;
+}
+
+@media (max-width: 39.99rem) {
+  .newcomer-calculator__fields {
+    grid-template-columns: 1fr;
+  }
 }
 
 .newcomer-calculator__label {
@@ -189,15 +109,19 @@ async function calculate(event) {
   font-weight: 600;
 }
 
-.newcomer-calculator__symbol,
-.newcomer-calculator__unit {
+.newcomer-calculator__symbol {
   color: var(--vp-c-text-2);
   white-space: nowrap;
-}
-
-.newcomer-calculator__symbol {
   font-family: var(--vp-font-family-mono);
   font-weight: 400;
+}
+
+.newcomer-calculator__value {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .newcomer-calculator__control {
@@ -206,8 +130,15 @@ async function calculate(event) {
   gap: 8px;
 }
 
+.newcomer-calculator__unit {
+  color: var(--vp-c-text-2);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.newcomer-calculator__select,
 .newcomer-calculator__input {
-  flex: 1;
+  width: 100%;
   min-width: 0;
   min-height: 44px;
   padding: 7px 12px;
@@ -216,48 +147,25 @@ async function calculate(event) {
   background: var(--vp-c-bg);
 }
 
-.newcomer-calculator__input--select {
+.newcomer-calculator__select {
   appearance: auto;
+}
+
+.newcomer-calculator__select:focus-visible,
+.newcomer-calculator__input:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
 }
 
 .newcomer-calculator__input[aria-invalid="true"] {
   border-color: var(--vp-c-danger-1);
 }
 
-.newcomer-calculator__input:focus-visible,
-.newcomer-calculator__button:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 2px;
-}
-
-.newcomer-calculator__unit {
-  width: 3em;
-  font-size: 13px;
-}
-
-.newcomer-calculator__error {
+.newcomer-calculator__error:not(:empty) {
+  margin-top: 4px;
   color: var(--vp-c-danger-1);
   font-size: 13px;
   line-height: 1.5;
-}
-
-.newcomer-calculator__error:not(:empty) {
-  margin-top: 4px;
-}
-
-.newcomer-calculator__button {
-  min-height: 44px;
-  margin-top: 20px;
-  padding: 0 18px;
-  border-radius: 8px;
-  background: var(--vp-button-brand-bg);
-  color: var(--vp-button-brand-text);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.newcomer-calculator__button:hover {
-  background: var(--vp-button-brand-hover-bg);
 }
 
 .newcomer-calculator__formula {
@@ -279,15 +187,11 @@ async function calculate(event) {
   padding: 12px 16px;
   border-radius: 8px;
   background: var(--vp-c-brand-soft);
+  font-weight: 600;
   overflow-wrap: anywhere;
 }
 
-.newcomer-calculator__result-title {
-  margin-bottom: 4px;
-  font-weight: 600;
-}
-
-.newcomer-calculator__result-title strong {
+.newcomer-calculator__result strong {
   margin-inline-start: 8px;
   color: var(--vp-c-brand-1);
   font-size: 1.25rem;
