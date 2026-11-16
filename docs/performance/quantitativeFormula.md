@@ -12,7 +12,7 @@ const projects = [
 ];
 </script>
 
-# 新人入职量化公式
+# 新人项目熟悉周期估算
 
 <NewcomerCalculator :projects="projects" :daily-work-hours="dailyWorkHours" />
 
