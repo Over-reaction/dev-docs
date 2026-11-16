@@ -63,7 +63,7 @@ const performanceSidebar = [
   {
     text: "绩效考核",
     items: [
-      { text: "新人入职", link: newcomerFormulaPath },
+      { text: "项目对接周期估算", link: newcomerFormulaPath },
       { text: "后端绩效考核", link: "/performance/performance-backend" },
       { text: "前端绩效考核", link: "/performance/performance-frontend" },
     ],
