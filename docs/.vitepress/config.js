@@ -1,8 +1,8 @@
 import { defineConfig } from "vitepress";
 import ruleBadges from "./markdown/rule-badges.js";
 
-// 顶部「前端标准」入口直接打开前端开发标准的第一篇文档。
-const frontendHtmlPath = "/frontend/standards/";
+// 前端标准的顶部入口与侧边栏分组标题共用概览页。
+const frontendStandardsPath = "/frontend/standards/";
 
 // 前端侧边栏的开发标准与专项标准分别维护在两个列表中。
 const frontendStandards = [
@@ -105,7 +105,7 @@ export default defineConfig({
       {
         text: "前端标准",
         activeMatch: "^/frontend/",
-        link: frontendHtmlPath,
+        link: frontendStandardsPath,
       },
       {
         text: "岗位职责",
@@ -123,7 +123,11 @@ export default defineConfig({
     // 按页面路径前缀选择侧边栏，每个前缀下可以配置多个分组。
     sidebar: {
       "/frontend/": [
-        { text: "前端开发标准", items: frontendStandards },
+        {
+          text: "前端开发标准",
+          link: frontendStandardsPath,
+          items: frontendStandards,
+        },
         { text: "专项标准", items: frontendOtherStandards },
       ],
       "/backend/": [
