@@ -1,18 +1,12 @@
 import { defineConfig } from "vitepress";
-
-// 将规范条目的标记映射为 VitePress 徽标样式。
-const ruleBadgeTypes = {
-  强制: "danger",
-  推荐: "warning",
-  参考: "note",
-};
+import ruleBadges from "./markdown/rule-badges.js";
 
 // 顶部「前端标准」入口直接打开前端开发标准的第一篇文档。
-const frontendHtmlPath = "/frontend/standards/html";
+const frontendHtmlPath = "/frontend/standards/";
 
 // 前端侧边栏的开发标准与专项标准分别维护在两个列表中。
 const frontendStandards = [
-  { text: "HTML", link: frontendHtmlPath },
+  { text: "HTML", link: "/frontend/standards/html" },
   { text: "CSS", link: "/frontend/standards/css" },
   { text: "JavaScript", link: "/frontend/standards/javascript" },
   { text: "Vue 3", link: "/frontend/standards/vue3" },
@@ -77,8 +71,8 @@ const performanceSidebar = [
   },
 ];
 
-// 顶部「岗位职责」入口默认打开测试岗职责页。
-const testingResponsibilitiesPath = "/responsibilities/testing";
+// 顶部「岗位职责」入口默认打开研发运维岗职责页。
+const devopsResponsibilitiesPath = "/responsibilities/devops";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -86,23 +80,11 @@ export default defineConfig({
   lang: "zh-CN",
   title: "研发规范",
   description: "技术开发指南",
+  // 暂时下线测试岗职责页，保留 Markdown 源文件。
+  srcExclude: ["responsibilities/testing.md"],
   markdown: {
     config(md) {
-      // 在 Markdown 行内解析前，将段落开头的 **【强制】**、**【推荐】** 或 **【参考】** 转为徽标。
-      md.core.ruler.before("inline", "rule_badges", (state) => {
-        for (const [index, token] of state.tokens.entries()) {
-          if (
-            token.type === "inline" &&
-            state.tokens[index - 1]?.type === "paragraph_open"
-          ) {
-            token.content = token.content.replace(
-              /^\*\*【(强制|推荐|参考)】\*\*/,
-              (_, label) =>
-                `<Badge type="${ruleBadgeTypes[label]}" text="${label}" />`,
-            );
-          }
-        }
-      });
+      md.use(ruleBadges);
     },
   },
   themeConfig: {
@@ -128,7 +110,7 @@ export default defineConfig({
       {
         text: "岗位职责",
         activeMatch: "^/responsibilities/",
-        link: testingResponsibilitiesPath,
+        link: devopsResponsibilitiesPath,
       },
       { text: "版本号规范", link: "/changelog/" },
       {
@@ -156,10 +138,9 @@ export default defineConfig({
         {
           text: "岗位职责",
           items: [
-            { text: "测试岗", link: testingResponsibilitiesPath },
             {
               text: "研发运维岗",
-              link: "/responsibilities/devops",
+              link: devopsResponsibilitiesPath,
               collapsed: false,
               items: [
                 {

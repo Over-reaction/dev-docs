@@ -1,0 +1,8 @@
+.vp-doc :is(code, span).rule-id {
+  color: var(--vp-c-text-2);
+  font-size: 12px;
+  font-family: inherit;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}

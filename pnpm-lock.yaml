@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@mdit/plugin-stylize':
+        specifier: ^1.0.3
+        version: 1.0.3
       '@vue-flow/background':
         specifier: ^1.3.2
         version: 1.3.2(@vue-flow/core@1.48.2(vue@3.5.45))(vue@3.5.45)
@@ -60,6 +63,15 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.6.0':
     resolution: {integrity: sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==}
+
+  '@mdit/plugin-stylize@1.0.3':
+    resolution: {integrity: sha512-7sNiokh+lw3/tCZgJi80X7dS1iMd2oJIKQ4tkk1ge56UQIqdljCDPA+JwVT4qfmb8GlPtYMsvuiS1TGKDLu36g==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      markdown-it: ^14.2.0
+    peerDependenciesMeta:
+      markdown-it:
+        optional: true
 
   '@oxc-project/types@0.156.0':
     resolution: {integrity: sha512-1Duyg48TdJNdyhEB8Xn1L36bT9Pv6GUtlKjHxOys8xkaF/rQq3XJE+bAurSK/AgIz5mGFsb77cn9Pb20+WCScw==}
@@ -753,6 +765,10 @@ snapshots:
   '@iconify/types@2.0.0': {}
 
   '@jridgewell/sourcemap-codec@1.6.0': {}
+
+  '@mdit/plugin-stylize@1.0.3':
+    dependencies:
+      '@types/markdown-it': 14.2.0
 
   '@oxc-project/types@0.156.0': {}
 

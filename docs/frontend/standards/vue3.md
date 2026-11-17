@@ -39,6 +39,7 @@ outline: [2, 4]
 ### 3.1. 组件名称
 
 **【强制】** 组件名称使用多个单词，应用根组件 `App` 除外。Vue 单文件组件文件名使用 PascalCase，例如 `ArticleCard.vue`。
+`FE-VUE3-M-COMPONENT_NAME-001`{.rule-id}
 
 ::: details 详细解释
 这样可以避免与现有和未来的 HTML 元素发生冲突，因为所有 HTML 元素都由单个单词组成。也能说明组件的具体用途。
@@ -52,7 +53,7 @@ outline: [2, 4]
 <ArticleCard />
 ```
 
-**【推荐】** 组件名称命名使用 PascalCase（大驼峰命名）
+**【推荐】** 组件名称命名使用 PascalCase（大驼峰命名）。 [FE-VUE3-S-COMPONENT_NAME-002]
 
 **【推荐】** 尽量使用完整单词，使用含义清晰的完整单词
 

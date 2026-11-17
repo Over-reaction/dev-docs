@@ -3,5 +3,6 @@ import Layout from "./Layout.vue";
 import "./variables.css";
 import "./home.css";
 import "./responsibilities.css";
+import "./index.css";
 
 export default { extends: DefaultTheme, Layout };
