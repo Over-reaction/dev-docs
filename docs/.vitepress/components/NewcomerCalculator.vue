@@ -13,6 +13,13 @@ const backgroundDays = ref(1);
 const selectedProject = computed(() =>
   props.projects.find((project) => project.id === selectedProjectId.value),
 );
+const familiarityHoursSummary = computed(() => {
+  if (!selectedProject.value) return "请选择项目";
+
+  const { familiarityHours, featureCounts } = selectedProject.value;
+  const { complex, medium, simple } = featureCounts;
+  return `${familiarityHours} 小时（复杂功能 ${complex} 个、中等功能 ${medium} 个、简单功能 ${simple} 个）`;
+});
 const isBackgroundDaysValid = computed(() =>
   Number.isFinite(backgroundDays.value) && backgroundDays.value >= 0,
 );
@@ -25,7 +32,7 @@ const result = computed(() => {
 
 <template>
   <div class="newcomer-calculator">
-    <h2 id="parameters">熟悉周期计算</h2>
+    <h2 id="parameters">对接周期计算</h2>
 
     <div class="newcomer-calculator__fields">
       <div>
@@ -36,13 +43,10 @@ const result = computed(() => {
         </select>
       </div>
       <div>
-        <label class="newcomer-calculator__label" :for="backgroundDaysId">
-          项目背景了解周期 <span class="newcomer-calculator__symbol">B</span>
-        </label>
+        <label class="newcomer-calculator__label" :for="backgroundDaysId">项目背景了解周期</label>
         <div class="newcomer-calculator__control">
-          <input :id="backgroundDaysId" v-model="backgroundDays" class="newcomer-calculator__input"
-            type="number" required min="0" step="any" inputmode="decimal"
-            :aria-invalid="!isBackgroundDaysValid"
+          <input :id="backgroundDaysId" v-model="backgroundDays" class="newcomer-calculator__input" type="number"
+            required min="0" step="any" inputmode="decimal" :aria-invalid="!isBackgroundDaysValid"
             :aria-describedby="`${backgroundDaysId}-unit ${backgroundDaysId}-error`">
           <span :id="`${backgroundDaysId}-unit`" class="newcomer-calculator__unit">工作日</span>
         </div>
@@ -51,22 +55,18 @@ const result = computed(() => {
         </div>
       </div>
       <dl>
-        <dt class="newcomer-calculator__label">
-          项目功能熟悉总时长 <span class="newcomer-calculator__symbol">H</span>
-        </dt>
-        <dd class="newcomer-calculator__value">
-          {{ selectedProject ? `${selectedProject.familiarityHours} 小时` : "请选择项目" }}
-        </dd>
+        <dt class="newcomer-calculator__label">项目功能熟悉总时长</dt>
+        <dd class="newcomer-calculator__value">{{ familiarityHoursSummary }}</dd>
       </dl>
       <dl>
-        <dt class="newcomer-calculator__label">每日工作时长 <span class="newcomer-calculator__symbol">W</span></dt>
+        <dt class="newcomer-calculator__label">每日工作时长</dt>
         <dd class="newcomer-calculator__value">{{ dailyWorkHours }} 小时/工作日</dd>
       </dl>
     </div>
 
     <div role="status" aria-atomic="true">
       <div v-if="result !== null" class="newcomer-calculator__result">
-        预计项目熟悉周期 <strong>{{ result }} 个工作日</strong>
+        项目对接周期 <strong>{{ result }} 个工作日</strong>
       </div>
     </div>
 
@@ -74,13 +74,29 @@ const result = computed(() => {
 
     <div class="newcomer-calculator__formula">
       <math display="block">
-        <mi>T</mi>
+        <mrow>
+          <mtext>项目对接周期</mtext>
+          <mtext v-if="result !== null" class="newcomer-calculator__formula-value">（{{ result }} 个工作日）</mtext>
+        </mrow>
         <mo>=</mo>
-        <mi>B</mi>
+        <mrow>
+          <mtext>项目背景了解周期</mtext>
+          <mtext v-if="selectedProject && isBackgroundDaysValid" class="newcomer-calculator__formula-value">
+            （{{ backgroundDays }} 个工作日）
+          </mtext>
+        </mrow>
         <mo>+</mo>
         <mfrac>
-          <mi>H</mi>
-          <mi>W</mi>
+          <mrow>
+            <mtext>项目功能熟悉总时长</mtext>
+            <mtext v-if="selectedProject" class="newcomer-calculator__formula-value">
+              （{{ selectedProject.familiarityHours }} 小时）
+            </mtext>
+          </mrow>
+          <mrow>
+            <mtext>每日工作时长</mtext>
+            <mtext v-if="selectedProject" class="newcomer-calculator__formula-value">（{{ dailyWorkHours }} 小时/工作日）</mtext>
+          </mrow>
         </mfrac>
       </math>
     </div>
@@ -101,19 +117,10 @@ const result = computed(() => {
 }
 
 .newcomer-calculator__label {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
+  display: block;
   margin-bottom: 6px;
   font-size: 14px;
   font-weight: 600;
-}
-
-.newcomer-calculator__symbol {
-  color: var(--vp-c-text-2);
-  white-space: nowrap;
-  font-family: var(--vp-font-family-mono);
-  font-weight: 400;
 }
 
 .newcomer-calculator__value {
@@ -179,7 +186,12 @@ const result = computed(() => {
 .newcomer-calculator__formula math {
   width: max-content;
   margin-inline: auto;
-  font-size: clamp(1.05rem, 4vw, 1.5rem);
+  font-size: clamp(0.9375rem, 3.25vw, 1.125rem);
+}
+
+.newcomer-calculator__formula-value {
+  color: var(--vp-c-brand-1);
+  font-size: 0.85em;
 }
 
 .newcomer-calculator__result {
