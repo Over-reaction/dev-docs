@@ -4,9 +4,9 @@
       'image-viewer__viewport--ready': scale,
       'image-viewer__viewport--dragging': drag,
       'image-viewer__viewport--laser': scale && laserEnabled,
-    }" role="img" :aria-label="alt" @pointerdown="startPointer" @pointermove="movePointer"
-      @pointerup="endLaserStroke" @pointerleave="endLaserStroke" @pointercancel="endLaserStroke"
-      @lostpointercapture="stopPan" @wheel="zoomWithWheel">
+    }" role="img" :aria-label="alt" @pointerdown="startPointer" @pointerenter="movePointer" @pointermove="movePointer"
+      @pointerleave="hideLaserPoint" @pointercancel="hideLaserPoint" @lostpointercapture="stopPan"
+      @wheel="zoomWithWheel">
       {{ alt }}
     </canvas>
     <template v-if="scale">
@@ -86,11 +86,11 @@ function paint(now) {
   const x = (width - imageWidth) / 2 + offset.value.x;
   const y = (height - imageHeight) / 2 + offset.value.y;
   context.drawImage(image.value, x, y, imageWidth, imageHeight);
-  paintLaser(now);
+  paintLaser(now, pixelRatio);
 }
 
-function paintLaser(now) {
-  if (!laserTrail.length) return;
+function paintLaser(now, pixelRatio) {
+  if (!laserPoint && !laserTrail.length) return;
 
   laserTrail = laserTrail.filter((segment) => now - segment.time < laserDuration);
   context.save();
@@ -105,6 +105,16 @@ function paintLaser(now) {
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
     context.stroke();
+  }
+
+  if (laserPoint) {
+    context.globalAlpha = 1;
+    context.shadowColor = "#ff3b48";
+    context.shadowBlur = 10 * pixelRatio;
+    context.fillStyle = "#ff3b48";
+    context.beginPath();
+    context.arc(laserPoint.x, laserPoint.y, 4, 0, Math.PI * 2);
+    context.fill();
   }
 
   context.restore();
@@ -159,13 +169,16 @@ function trackLaser(event, draw) {
   const point = { x: event.clientX - left, y: event.clientY - top };
   if (draw && laserPoint && (point.x !== laserPoint.x || point.y !== laserPoint.y)) {
     laserTrail.push({ from: laserPoint, to: point, time: performance.now() });
-    requestPaint();
   }
   laserPoint = point;
+  requestPaint();
 }
 
-function endLaserStroke(event) {
-  if (event.isPrimary) laserPoint = null;
+function hideLaserPoint() {
+  if (!laserPoint) return;
+
+  laserPoint = null;
+  requestPaint();
 }
 
 function startPointer(event) {
@@ -188,7 +201,7 @@ function movePointer(event) {
   if (!event.isPrimary) return;
 
   if (laserEnabled.value && scale.value) {
-    if (event.buttons & 1) trackLaser(event, true);
+    trackLaser(event, Boolean(event.buttons & 1));
     return;
   }
 
@@ -270,11 +283,7 @@ onBeforeUnmount(() => {
 }
 
 .image-viewer__viewport--laser {
-  cursor: url("/excalidraw-cursors/laser-light.svg") 8 8, crosshair;
-}
-
-.dark .image-viewer__viewport--laser {
-  cursor: url("/excalidraw-cursors/laser-dark.svg") 8 8, crosshair;
+  cursor: none;
 }
 
 .image-viewer__controls {
