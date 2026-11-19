@@ -15,6 +15,7 @@ const frontendStandards = [
 
 const frontendOtherStandards = [
   { text: "技术方案标准", link: "/frontend/other/technical-design" },
+  { text: "自测标准", link: "/frontend/other/self-test" },
   { text: "Vue 3 项目结构标准", link: "/frontend/other/project-structure" },
 ];
 
