@@ -28,31 +28,31 @@ outline: [2, 3]
 
 ### 2.1. 文档声明和根元素
 
-**【强制】** 文档开头必须写明文档类型声明 `<!doctype html>`。
+**【强制】** 文档开头必须写明文档类型声明 `<!doctype html>`。 `FE-HTML-M-DOCUMENT_STRUCTURE-001`{.rule-id}
 
-**【强制】** 必须有且只能有一个位于顶层的 `<html>` 元素。显式写出一个 `<head>` 和一个 `<body>`，依次作为根元素的直接子元素。
+**【强制】** 必须有且只能有一个位于顶层的 `<html>` 元素。显式写出一个 `<head>` 和一个 `<body>`，依次作为根元素的直接子元素。 `FE-HTML-M-DOCUMENT_STRUCTURE-002`{.rule-id}
 
-**【强制】** `<html>` 必须声明与页面主语言匹配的 `lang`，如 `zh-CN` 或 `en-US`。局部内容语言不同时，在相应容器上标注 `lang`。
+**【强制】** `<html>` 必须声明与页面主语言匹配的 `lang`，如 `zh-CN` 或 `en-US`。局部内容语言不同时，在相应容器上标注 `lang`。 `FE-HTML-M-DOCUMENT_STRUCTURE-003`{.rule-id}
 
 ### 2.2. 元数据和标题
 
-**【强制】** HTML 文件使用 UTF-8 保存。页面级 `<meta>` 放在 `<head>`，首项声明 `<meta charset="utf-8" />`。
+**【强制】** HTML 文件使用 UTF-8 保存。页面级 `<meta>` 放在 `<head>`，首项声明 `<meta charset="utf-8" />`。 `FE-HTML-M-METADATA-001`{.rule-id}
 
-**【强制】** 在 `<head>` 中设置唯一的 `<title>`，用能识别页面的文字作标题。
+**【强制】** 在 `<head>` 中设置唯一的 `<title>`，用能识别页面的文字作标题。 `FE-HTML-M-METADATA-002`{.rule-id}
 
-**【推荐】** 响应式页面设置 `width=device-width, initial-scale=1`，保留浏览器缩放。
+**【推荐】** 响应式页面设置 `width=device-width, initial-scale=1`，保留浏览器缩放。 `FE-HTML-S-METADATA-003`{.rule-id}
 
 ### 2.3. 资源加载
 
-**【推荐】** 样式表放在 `<head>`。普通脚本放在 `</body>` 前，也可在头部为外部经典脚本设置 `defer`。
+**【推荐】** 样式表放在 `<head>`。普通脚本放在 `</body>` 前，也可在头部为外部经典脚本设置 `defer`。 `FE-HTML-S-RESOURCE_LOADING-001`{.rule-id}
 
-**【推荐】** 普通样式和经典脚本省略默认 `type`。ES 模块保留 `type="module"`。
+**【推荐】** 普通样式和经典脚本省略默认 `type`。ES 模块保留 `type="module"`。 `FE-HTML-S-RESOURCE_LOADING-002`{.rule-id}
 
-**【推荐】** 同站静态资源优先使用相对地址，第三方资源使用显式 `https://` 地址。
+**【推荐】** 同站静态资源优先使用相对地址，第三方资源使用显式 `https://` 地址。 `FE-HTML-S-RESOURCE_LOADING-003`{.rule-id}
 
-**【推荐】** 仅对当前页的关键资源使用 `preload`，设置正确的 `as` 并实际引用资源。
+**【推荐】** 仅对当前页的关键资源使用 `preload`，设置正确的 `as` 并实际引用资源。 `FE-HTML-S-RESOURCE_LOADING-004`{.rule-id}
 
-**【推荐】** 需要提前建立跨源连接时用 `preconnect`，仅需解析 DNS 时用 `dns-prefetch`。
+**【推荐】** 需要提前建立跨源连接时用 `preconnect`，仅需解析 DNS 时用 `dns-prefetch`。 `FE-HTML-S-RESOURCE_LOADING-005`{.rule-id}
 
 ```html
 <link rel="preload" href="/assets/hero.webp" as="image" />
@@ -85,7 +85,7 @@ outline: [2, 3]
 
 ### 3.1. 注释
 
-**【强制】** HTML 注释不得包含凭据、证书、密码、个人信息、内网地址或敏感业务规则。
+**【强制】** HTML 注释不得包含凭据、证书、密码、个人信息、内网地址或敏感业务规则。 `FE-HTML-M-COMMENT-001`{.rule-id}
 
 ```html
 <!-- 订单状态区 -->
@@ -97,13 +97,13 @@ outline: [2, 3]
 
 ### 3.2. 标签和属性
 
-**【强制】** HTML 标签名统一使用小写。有值的属性统一使用双引号。
+**【强制】** HTML 标签名统一使用小写。有值的属性统一使用双引号。 `FE-HTML-M-TAG_ATTRIBUTE-001`{.rule-id}
 
-**【推荐】** `<meta>`、`<link>`、`<img>`、`<input>` 等 HTML 空元素统一写作 `/>`，斜线前保留一个空格。普通元素按元素规则写结束标签。
+**【推荐】** `<meta>`、`<link>`、`<img>`、`<input>` 等 HTML 空元素统一写作 `/>`，斜线前保留一个空格。普通元素按元素规则写结束标签。 `FE-HTML-S-TAG_ATTRIBUTE-002`{.rule-id}
 
-**【推荐】** `disabled`、`checked`、`selected` 等布尔属性仅写属性名。需要关闭时移除属性，写成 `disabled="false"` 仍表示禁用。
+**【推荐】** `disabled`、`checked`、`selected` 等布尔属性仅写属性名。需要关闭时移除属性，写成 `disabled="false"` 仍表示禁用。 `FE-HTML-S-TAG_ATTRIBUTE-003`{.rule-id}
 
-**【推荐】** 业务自定义数据属性使用 `data-*`，例如 `data-action="retry"`。
+**【推荐】** 业务自定义数据属性使用 `data-*`，例如 `data-action="retry"`。 `FE-HTML-S-TAG_ATTRIBUTE-004`{.rule-id}
 
 ```html
 <button type="button" data-action="retry" disabled>重试</button>
@@ -112,9 +112,9 @@ outline: [2, 3]
 
 ### 3.3. 语义和可访问性
 
-**【参考】** 按内容和用途选用原生元素。列表使用 `<ul>` 或 `<ol>` 与 `<li>`，页面跳转用带 `href` 的 `<a>`，执行操作用 `<button>`。
+**【参考】** 按内容和用途选用原生元素。列表使用 `<ul>` 或 `<ol>` 与 `<li>`，页面跳转用带 `href` 的 `<a>`，执行操作用 `<button>`。 `FE-HTML-R-SEMANTICS_ACCESSIBILITY-001`{.rule-id}
 
-**【参考】** 为信息性图片提供表达用途或内容的 `alt`，纯装饰图片使用 `alt=""`。给表单控件提供可访问名称，优先使用关联的 `<label>`。
+**【参考】** 为信息性图片提供表达用途或内容的 `alt`，纯装饰图片使用 `alt=""`。给表单控件提供可访问名称，优先使用关联的 `<label>`。 `FE-HTML-R-SEMANTICS_ACCESSIBILITY-002`{.rule-id}
 
 ```html
 <label for="order-id">订单号</label>
