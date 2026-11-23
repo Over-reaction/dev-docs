@@ -145,7 +145,7 @@ const projectStructure = [
 
 适用于使用 Maven 和 Spring Boot、按业务边界独立部署的 Java 服务。以下以同一仓库管理多个服务为例；多仓库项目必须保持相同的服务内部结构，公共库和接口模块通过制品仓库发布与引用。
 
-本标准与[通用工程标准](/backend/other/project-structure)配套使用，命名、分层职责、配置、依赖、测试资源和交付要求统一在通用标准中维护。
+本标准与[通用项目结构标准](/backend/other/project-structure)配套使用，命名、分层职责、配置、依赖、测试资源和交付要求统一在通用标准中维护。
 
 `project` 与 `com.yiqianhe.project` 均为示例名称。网关、认证和公共技术模块按实际架构创建。点击带有子项的目录行可展开或收起目录。
 

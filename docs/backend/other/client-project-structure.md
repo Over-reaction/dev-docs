@@ -134,7 +134,7 @@ const projectStructure = [
 
 适用于使用 Maven 构建、运行在用户电脑或边缘设备上的 Java 桌面程序、采集客户端和常驻代理程序。界面允许采用 JavaFX、Swing 或本地 Web 控制台；不要求必须使用 Spring Boot。
 
-本标准与[通用工程标准](/backend/other/project-structure)配套使用，命名、分层职责、配置、依赖、测试资源和交付要求统一在通用标准中维护。
+本标准与[通用项目结构标准](/backend/other/project-structure)配套使用，命名、分层职责、配置、依赖、测试资源和交付要求统一在通用标准中维护。
 
 以下以具有采集和上报能力的客户端及根包 `com.yiqianhe.project.client` 为例，业务模块按实际功能替换。设备接入、模型推理、自动更新等目录仅在具备相应能力时创建。点击带有子项的目录行可展开或收起目录。
 

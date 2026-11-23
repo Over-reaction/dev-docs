@@ -112,7 +112,7 @@ const projectStructure = [
 
 适用于使用 Maven、Spring Boot 和 MyBatis 的 Java Web 单体应用。一个应用作为一个整体构建和部署，内部先按业务模块划分，再按职责分层。单体应用允许使用多个 Maven 模块，是否为单体以部署边界为准。
 
-本标准与[通用工程标准](/backend/other/project-structure)配套使用，命名、分层职责、配置、依赖、测试资源和交付要求统一在通用标准中维护。
+本标准与[通用项目结构标准](/backend/other/project-structure)配套使用，命名、分层职责、配置、依赖、测试资源和交付要求统一在通用标准中维护。
 
 以下以单 Maven 模块和根包 `com.yiqianhe.project` 为例。点击带有子项的目录行可展开或收起目录。
 

@@ -31,10 +31,11 @@ outline: [2, 4]
 
 ## 专项标准
 
-- [通用工程标准](/backend/other/project-structure)
+- [通用项目结构标准](/backend/other/project-structure)
 - [单体项目结构标准](/backend/other/monolith-project-structure)
 - [微服务项目结构标准](/backend/other/microservice-project-structure)
 - [客户端项目结构标准](/backend/other/client-project-structure)
+- [服务器运维指标标准](/backend/other/server-operations-standard)
 
 ## 参考文献
 
