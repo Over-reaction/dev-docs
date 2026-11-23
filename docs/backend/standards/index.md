@@ -18,6 +18,17 @@ outline: [2, 4]
 4. [安全规范](./security.md)
 5. [MySQL 数据库](./mysql.md)
 
+## 规则 ID
+
+每条规约在正文末尾标注规则 ID，格式为 `BE-${语言}-${等级}-${标准名称}-${编号}`。
+
+- 语言使用 `JAVA`（Java）或 `SQL`（MySQL 数据库规约）。
+- 等级使用 `M`（Must，强制）、`S`（Should，推荐）或 `R`（Reference，参考）。
+- 标准名称使用对应主题的大写英文名称，多个单词用下划线 `_` 分隔，例如 `CODE_FORMAT`。
+- 同一语言和标准名称下的规则共用一组编号，按三位数字从 `001` 起递增。
+
+例如，`BE-JAVA-M-CODE_FORMAT-001` 表示 Java 代码格式的第 1 条强制规约。编写 Markdown 时使用 `` `BE-JAVA-M-CODE_FORMAT-001`{.rule-id} ``。
+
 ## 专项标准
 
 - [通用工程标准](/backend/other/project-structure)
