@@ -34,7 +34,7 @@
   --workflow-stage-surface: #142f30;
 }
 
-/* 测试与发布 */
+/* 测试 */
 [data-workflow-stage="4"] {
   --workflow-stage-accent: #b45309;
   --workflow-stage-surface: #fffbeb;
@@ -43,6 +43,17 @@
 :root.dark [data-workflow-stage="4"] {
   --workflow-stage-accent: #fbbf24;
   --workflow-stage-surface: #382b17;
+}
+
+/* 研发发布上线 */
+[data-workflow-stage="release"] {
+  --workflow-stage-accent: #15803d;
+  --workflow-stage-surface: #f0fdf4;
+}
+
+:root.dark [data-workflow-stage="release"] {
+  --workflow-stage-accent: #4ade80;
+  --workflow-stage-surface: #173322;
 }
 
 /* .vitepress/theme/custom.css */

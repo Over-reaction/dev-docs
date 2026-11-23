@@ -3,7 +3,7 @@
     :default-edge-options="edgeOptions" :default-viewport="initialViewport" :connection-mode="ConnectionMode.Strict"
     :min-zoom="0.05" :max-zoom="1.75" :nodes-draggable="false" :nodes-connectable="false" :elements-selectable="false"
     :nodes-focusable="false" :edges-focusable="false" :zoom-on-scroll="true" :prevent-scrolling="true"
-    :fit-view-on-init="!stages.length" @init="flow = $event">
+    :fit-view-on-init="!initialStage" @init="flow = $event">
     <Background variant="dots" :gap="24" :size="2" color="var(--vp-c-text-3)" aria-hidden="true" />
     <template #edge-workflow-route="edge">
       <WorkflowRoute v-bind="edge" />
@@ -65,9 +65,8 @@ function stageViewport(stage) {
   return { x: 24 - stage.position.x, y: 20 - stage.position.y, zoom: 1 };
 }
 
-const initialViewport = computed(() =>
-  props.stages.length ? stageViewport(props.stages[0]) : { x: 0, y: 0, zoom: 1 },
-);
+const initialStage = computed(() => props.stages.find((stage) => !stage.focusNodeIds));
+const initialViewport = computed(() => initialStage.value ? stageViewport(initialStage.value) : { x: 0, y: 0, zoom: 1 });
 
 function zoomIn() {
   return flow.value?.zoomIn();
@@ -78,12 +77,18 @@ function zoomOut() {
 }
 
 function fitView() {
-  return flow.value?.fitView({ padding: props.stages.length ? 0.2 : 0.1 });
+  return flow.value?.fitView({ padding: initialStage.value ? 0.2 : 0.1 });
 }
 
 function focusStage(stageId) {
   const stage = props.stages.find(({ id }) => id === stageId);
-  if (stage) return flow.value?.setViewport(stageViewport(stage));
+  if (!stage) {
+    return;
+  }
+  if (stage.focusNodeIds) {
+    return flow.value?.fitView({ nodes: stage.focusNodeIds, padding: "20px", maxZoom: 1 });
+  }
+  return flow.value?.setViewport(stageViewport(stage));
 }
 
 defineExpose({ zoomIn, zoomOut, fitView, focusStage });

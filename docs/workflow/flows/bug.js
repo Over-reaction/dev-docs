@@ -1,4 +1,9 @@
+import { createReleaseNodes } from "./release-nodes.js";
+
+const release = createReleaseNodes({ x: 268, y: 132, stagePosition: { x: 356, y: 80 } });
+
 export const bugFlow = {
+  stages: [release.stage],
   nodes: [
     {
       id: "1",
@@ -28,26 +33,13 @@ export const bugFlow = {
     {
       id: "6",
       position: { x: 769, y: -32 },
-      data: { label: "产品测试", stageId: "1" },
+      data: { label: "产品测试", stageId: "4" },
     },
-    {
-      id: "7",
-      position: { x: 935.6, y: -32 },
-      data: { label: "发布上线", stageId: "1" },
-    },
-    {
-      id: "8",
-      position: { x: 1102.2, y: -32 },
-      data: { label: "结束", shape: "terminal", stageId: "1" },
-    },
-    {
-      id: "9",
-      position: { x: 935.6, y: 102.4 },
-      data: { label: "记录发布\n上线版本", shape: "document", stageId: "1" },
-    },
+    release.stage,
+    ...release.nodes,
     {
       id: "10",
-      position: { x: 1102.2, y: 102.4 },
+      position: { x: 440, y: 378 },
       data: { label: "填写问题清单", shape: "document", stageId: "1" },
     },
   ],
@@ -93,36 +85,32 @@ export const bugFlow = {
       type: "step",
     },
     {
-      id: "e6-7",
+      id: "e6-release-version",
       source: "6",
-      target: "7",
-      sourceHandle: "right",
-      targetHandle: "left",
-      type: "step",
-    },
-    {
-      id: "e7-8",
-      source: "7",
-      target: "8",
-      sourceHandle: "right",
-      targetHandle: "left",
-      type: "step",
-    },
-    {
-      id: "e7-9",
-      source: "7",
-      target: "9",
+      target: "release-version",
       sourceHandle: "bottom",
       targetHandle: "top",
-      type: "step",
+      type: "workflow-route",
+      label: "通过",
+      data: { waypoints: [[833, 66], [332, 66]], labelSegment: 1 },
     },
     {
-      id: "e8-10",
-      source: "8",
+      id: "e-release-verify-5",
+      source: "release-verify",
+      target: "5",
+      sourceHandle: "left",
+      targetHandle: "bottom",
+      type: "workflow-route",
+      label: "否 · 返回研发修复",
+      data: { waypoints: [[206, 308], [206, 44], [666.4, 44]], labelSegment: 1 },
+    },
+    ...release.edges,
+    {
+      id: "e-release-close-10",
+      source: "release-close",
       target: "10",
-      sourceHandle: "bottom",
-      targetHandle: "top",
-      type: "step",
+      sourceHandle: "right",
+      targetHandle: "left",
     },
   ],
 };

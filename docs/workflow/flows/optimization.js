@@ -1,3 +1,7 @@
+import { createReleaseNodes } from "./release-nodes.js";
+
+const release = createReleaseNodes({ x: 2670.4, y: 192, stagePosition: { x: 2640.4, y: -20 } });
+
 const stages = [
   {
     id: "1",
@@ -17,8 +21,9 @@ const stages = [
   {
     id: "4",
     position: { x: 2101.2, y: -20 },
-    data: { label: "测试与发布", shape: "stage", stageId: "4" },
+    data: { label: "测试", shape: "stage", stageId: "4" },
   },
+  release.stage,
 ];
 
 export const optimizationFlow = {
@@ -235,21 +240,7 @@ export const optimizationFlow = {
       position: { x: 2446.4, y: 182 },
       data: { label: "是否通过", shape: "decision", stageId: "4" },
     },
-    {
-      id: "43",
-      position: { x: 2464.4, y: 304 },
-      data: { label: "研发运维\n发布上线", stageId: "4" },
-    },
-    {
-      id: "44",
-      position: { x: 2464.4, y: 416 },
-      data: { label: "记录发布版本", shape: "input", stageId: "4" },
-    },
-    {
-      id: "45",
-      position: { x: 2464.4, y: 528 },
-      data: { label: "结束", shape: "terminal", stageId: "4" },
-    },
+    ...release.nodes,
   ],
   edges: [
     {
@@ -802,29 +793,23 @@ export const optimizationFlow = {
       },
     },
     {
-      id: "e42-43",
+      id: "e42-release-version",
       source: "42",
-      target: "43",
-      sourceHandle: "bottom",
-      targetHandle: "top",
-      type: "step",
+      target: "release-version",
+      sourceHandle: "right",
+      targetHandle: "left",
       label: "是",
     },
     {
-      id: "e43-44",
-      source: "43",
-      target: "44",
-      sourceHandle: "bottom",
-      targetHandle: "top",
-      type: "step",
+      id: "e-release-verify-40",
+      source: "release-verify",
+      target: "40",
+      sourceHandle: "left",
+      targetHandle: "right",
+      type: "workflow-route",
+      label: "否 · 返回研发修复",
+      data: { waypoints: [[2626.4, 368], [2626.4, 504], [2430.4, 504], [2430.4, 560]], labelSegment: 2 },
     },
-    {
-      id: "e44-45",
-      source: "44",
-      target: "45",
-      sourceHandle: "bottom",
-      targetHandle: "top",
-      type: "step",
-    },
+    ...release.edges,
   ],
 };
